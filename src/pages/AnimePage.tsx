@@ -47,11 +47,22 @@ const AnimePage: React.FC = () => {
 					</div>
 					<div className="content-rightside">
 						<h1>{details.title}</h1>
+						<div className="information">
+							<div className="information__title">INFORMATION</div>
+							<h2><span>Category:</span> {details.type}</h2>
+							<h2><span>Status:</span> {details.status} </h2>
+							<h2><span>Episodes:</span> {details.totalEpisodes} </h2>
+							<h2><span>VoiceOver:</span> {details.subOrDub} </h2>
+							<h2><span>Genres:</span> {details.genres?.map((word) => <button className='button genre_button'> {word}</button>)} </h2>
+							<article>
+								<h2 className='description'>Description: <br />{details.description} </h2>
+							</article>
+						</div>
 					</div>
 				</div>
 
 
-				<button>
+				<button className='button back-button'>
 					<Link to={'/'}>back</Link>
 				</button>
 			</div>

@@ -23,6 +23,9 @@ const HomePage: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const { items } = useTypedSelector(state => state.fetchAnimeSlice)
 
+	const [currentPage, setCurrentPage] = useState(1);
+	const [hasNextPage, setHasNextPage] = useState(true);
+
 	const dispatch = useAppDispatch();
 
 
@@ -30,7 +33,7 @@ const HomePage: React.FC = () => {
 		setIsLoading(true)
 		const fetchItems = async () => {
 			try {
-				const response = await axios.get('https://api.consumet.org/anime/gogoanime/top-airing')
+				const response = await axios.get(`https://api.consumet.org/anime/gogoanime/top-airing`, { params: { page: currentPage } })
 				console.log(response.data)
 				dispatch(setItem(response.data.results))
 				setIsLoading(false);
@@ -40,9 +43,14 @@ const HomePage: React.FC = () => {
 
 		}
 		fetchItems();
-	}, [])
+	}, [currentPage])
 
-	console.log(items)
+	//	const setPage = (num: number) => {
+	//		setCurrentPage(currentPage + num);
+	//		console.log(currentPage)
+	//	}
+
+	console.log(currentPage)
 
 	const [open, setOpen] = useState(true);
 
@@ -56,7 +64,7 @@ const HomePage: React.FC = () => {
 					<Header />
 					<main>
 						{/* <BackgroundSlider images={images} interval={interval} items={items} /> */}
-						<h2 className='main-hot__title'>Новинки</h2>
+						<h2 className='main-hot__title'>Catalogue</h2>
 						<div className="carts">
 							{(items.length !== 0 && isLoading === false ?
 								items.map((item: IAnimeData, id: number) => (
@@ -75,7 +83,10 @@ const HomePage: React.FC = () => {
 								: <h3> Не удалось загрузить данные 	</h3>)
 							}
 						</div>
-
+						<div className="pagination">
+							<button className={'button pagination-button'} onClick={() => setCurrentPage(currentPage - 1)}> ⬅ </button>
+							<button className={'button pagination-button'} onClick={() => setCurrentPage(currentPage + 1)}> ➡ </button>
+						</div>
 					</main>
 					<footer>
 

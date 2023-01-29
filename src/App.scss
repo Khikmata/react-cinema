@@ -221,6 +221,35 @@ span{
   &:active{
     background-color: #83a4ff;
   }
+  &.pagination-button{
+    color: #d8d8d8;
+    margin: 0 5px ;
+    border: 1px solid #83a4ff;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+    &:hover{
+      color: white;
+      border: 3px solid #d8d8d8;
+    }
+  }
+  &.genre_button{
+    border: 1px solid rgba(216, 216, 216, 0.4);
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin: 0 3px;
+  }
+  &.back-button{
+    
+    margin: 20px 20px 100px;
+    padding: 4px 10px;
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+    a{
+      text-decoration: none;
+    }
+  }
 }
 
 .modal {
@@ -331,25 +360,57 @@ span{
   padding: 40px 0;
   display: flex;
     &-leftside {
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      flex: 40%;
+        align-items: center;
+      flex: 25%;
       &__image{
-        width: 300px;
+        margin: 12px;
+        width: 280px;
         height: 400px;
         img{
           width: 100%;
           height: 100%;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        object-fit: cover;
+          left: 0;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          object-fit: cover;
+          }
         }
-      }
       }
     
       &-rightside {
-        flex: 60%;
+        padding: 20px 40px;
+        flex: 75%;
+        h1{
+              max-width: 600px;
+        }
+        .information{
+          h2{
+            margin-bottom: 6px;
+            font-size: 16px;
+            color: #d8d8d8;
+            font-weight: 400;
+            max-width: 600px;
+          }
+          span{
+            color: #979797;
+          }
+          &__title{
+            font-weight: 700;
+              padding: 24px 0 8px;
+              color: #d8d8d8;
+
+          }
+        }
       }
+}
+.pagination{
+  padding: 0 40px 40px;
+}
+
+.description{
+padding: 16px 0px;
 }
