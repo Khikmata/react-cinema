@@ -7,15 +7,8 @@ import axios from "axios";
 import fetchAnimeSlice, { setItem } from "./store/reducers/fetchAnimeSlice";
 
 const App: React.FC = () => {
-
-
-
-
-
   return (
-
     <Routes>
-
       <Route path="/" element={<HomePage />} />
       <Route path="/anime/:id" element={<AnimePage />} />
     </Routes>

@@ -1,11 +1,23 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useAppDispatch } from '../hooks/redux';
+import { setOpen } from '../store/reducers/modal';
+
 
 
 
 
 
 const Header: React.FC = () => {
+
+	const dispatch = useAppDispatch();
+
+	const toggleModal = () => {
+		dispatch(setOpen(true));
+		(document.body.classList.add("activeModal"));
+	}
+
+
 	return (
 		<header className='header'>
 			<div className="header-leftside">
@@ -25,7 +37,7 @@ const Header: React.FC = () => {
 			</div>
 			<div className="header-rightside">
 				<button className='button auth-button'
-				//onClick={(event: React.MouseEvent<HTMLElement>)}
+					onClick={toggleModal}
 				>Log in</button>
 			</div>
 		</header >
