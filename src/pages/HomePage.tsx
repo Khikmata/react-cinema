@@ -52,19 +52,20 @@ const HomePage: React.FC = () => {
 
 	console.log(currentPage)
 
-	const open = useTypedSelector(state => state.modal.isOpen);
+	const modalOpen = useTypedSelector(state => state.modal.isModalOpen);
+
 
 	return (
 		<div className="homepage">
-			<div className={`wrapper ${open ? 'activeModal' : ''}`}>
-				{open && <Modal />
+			<div className={`wrapper ${modalOpen ? 'activeModal' : ''}`}>
+				{modalOpen && <Modal />
 				}
 
 				<div className="container">
 					<Header />
 					<main>
 						{/* <BackgroundSlider images={images} interval={interval} items={items} /> */}
-						<h2 className='main-hot__title'>Catalogue</h2>
+						<h2 className='main-hot__title'>CATALOGUE</h2>
 						<div className="carts">
 							{isLoading && [...new Array(10)].map((_, index) => <Skeleton key={index} />)}
 							{(items.length !== 0 && isLoading === false ?

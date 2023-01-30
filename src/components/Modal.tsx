@@ -5,27 +5,27 @@ import googleIcon from '../assets/images/googleIcon.svg'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
 import auth, { fetchUserData } from '../store/reducers/auth';
 import { stat } from 'fs';
-import { setOpen } from '../store/reducers/modal';
-
-
+import { setModalOpen } from '../store/reducers/modal';
 
 
 
 const Modal: React.FC = () => {
 
 
+	const [email, setEmail] = useState('')
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 
+	const emailRef = useRef(null);
 	const userRef = useRef(null);
 	const passRef = useRef(null);
 
 
-	const data = [username, password];
+	const [isSignUp, setIsSignUp] = useState(true)
 
 	const { isAuth } = useTypedSelector(state => state.auth)
 
-	const open = useTypedSelector(state => state.modal.isOpen);
+	const open = useTypedSelector(state => state.modal.isModalOpen);
 	const dispatch = useAppDispatch();
 
 	const handleKeypress = (e: any) => {
@@ -36,13 +36,13 @@ const Modal: React.FC = () => {
 	};
 
 	const toggleClose = () => {
-		dispatch(setOpen(false));
+		dispatch(setModalOpen(false));
 		(document.body.classList.remove("activeModal"));
 	}
 
 	const Auth = () => {
 
-		console.log(`username: ${username}, password: ${password}`)
+		console.log(`email: ${email}, username: ${username}, password: ${password}`)
 	}
 
 	return (
@@ -53,6 +53,11 @@ const Modal: React.FC = () => {
 						<div className="modal-content__close">
 							<button onClick={toggleClose} className='modal-content__close button button-close'>X</button>
 						</div>
+						{(isSignUp && <div className='modal-content__input'>
+							<p>Email</p>
+							<input onKeyDown={(e) => handleKeypress(e)} ref={emailRef} value={email} onChange={e => setEmail(e.target.value)} className='input__box' ></input>
+						</div>
+						)}
 						<div className='modal-content__input'>
 							<p>Username</p>
 							<input onKeyDown={(e) => handleKeypress(e)} ref={userRef} value={username} onChange={e => setUsername(e.target.value)} className='input__box' ></input>
@@ -61,13 +66,13 @@ const Modal: React.FC = () => {
 							<p>Password</p>
 							<input onKeyDown={(e) => handleKeypress(e)} ref={passRef} value={password} onChange={e => setPassword(e.target.value)} type={'password'} className='input__box'></input>
 						</div>
-						<div className='modal-content__secondaryInputs'>
+						{(!isSignUp && <div className='modal-content__secondaryInputs'>
 							<input className='check-box__input' type={'checkbox'} />
 							<p> Remember me </p>
 							<span> Forgot your password? </span>
 						</div>
-
-						<button type='submit' onClick={Auth} className='modal-content__button btn'> LOG IN </button>
+						)}
+						<button type='submit' onClick={Auth} className='modal-content__button button'>  {isSignUp ? `SIGN UP` : `LOG IN`} </button>
 						<span className='modal-content__orSignIn'>or sign in with</span>
 						<div className='modal-content__signIcons'>
 							<img src={gitIcon} style={{ marginBottom: '100px' }} height={30} width={30}></img>
@@ -75,6 +80,7 @@ const Modal: React.FC = () => {
 							<img src={vkIcon} height={30} width={30}></img>
 						</div>
 					</div>
+					<button onClick={() => setIsSignUp(!isSignUp)} className={`modal-content__orSignIn blue button`}> {isSignUp ? `Log In?` : `Sign Up?`}</button>
 				</div>
 			</div>
 		</div >

@@ -1,3 +1,4 @@
+import { StringMappingType } from "typescript";
 
 enum subanddub {
     'SUB',
@@ -75,4 +76,5 @@ export interface IAnimeDetails {
     totalEpisodes?: number;
     type?: string;
     url?: string;
+    otherName?: string;
 }
