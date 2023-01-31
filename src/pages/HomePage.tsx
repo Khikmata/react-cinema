@@ -24,13 +24,19 @@ const HomePage: React.FC = () => {
 
 	const dispatch = useAppDispatch();
 
+	const modalOpen = useTypedSelector(state => state.modal.isModalOpen);
+	const searchValue = useTypedSelector(state => state.search.searchValue);
 
 	useEffect(() => {
 		setIsLoading(true)
 		const fetchItems = async () => {
 			try {
-				const response = await axios.get(`https://api.consumet.org/anime/gogoanime/top-airing`, { params: { page: currentPage } })
-				console.log(response.data)
+				let response;
+				if (!searchValue) {
+					response = await axios.get(`https://api.consumet.org/anime/gogoanime/top-airing`, { params: { page: currentPage } })
+				} else {
+					response = await axios.get(`https://api.consumet.org/anime/gogoanime/${searchValue}?page=${currentPage}`);
+				}
 				dispatch(setItem(response.data.results))
 				setIsLoading(false);
 			} catch (error) {
@@ -39,7 +45,8 @@ const HomePage: React.FC = () => {
 
 		}
 		fetchItems();
-	}, [currentPage])
+
+	}, [currentPage, searchValue])
 
 	const incrementPage = () => {
 		setCurrentPage(currentPage + 1);
@@ -52,7 +59,6 @@ const HomePage: React.FC = () => {
 
 	console.log(currentPage)
 
-	const modalOpen = useTypedSelector(state => state.modal.isModalOpen);
 
 
 	return (
@@ -65,10 +71,10 @@ const HomePage: React.FC = () => {
 					<Header />
 					<main>
 						{/* <BackgroundSlider images={images} interval={interval} items={items} /> */}
-						<h2 className='main-hot__title'>CATALOGUE</h2>
+						<h2 className='main-hot__title'>POPULAR</h2>
 						<div className="carts">
 							{isLoading && [...new Array(10)].map((_, index) => <Skeleton key={index} />)}
-							{(items.length !== 0 && isLoading === false ?
+							{(items.length !== 0 && isLoading === false &&
 								items.map((item: IAnimeData, id: number) => (
 									(<div className='anime-card' key={id}>
 										<Link to={`/anime/${item.id}`} className="anime-card__img">
@@ -77,13 +83,13 @@ const HomePage: React.FC = () => {
 										<div className="anime-card__title">
 											<h3>{item.title}</h3>
 										</div>
-										<div className='anime-card__underTitle'>
+										{/* <div className='anime-card__underTitle'>
 											<h3>{item.genres[0]}, {item.genres[1]}, {item.genres[2]} </h3>
-										</div>
+										</div> */}
 									</div>)
 								))
-								: <h3> Не удалось загрузить данные 	</h3>)
-							}
+							)}
+							{(!isLoading && items.length === 0 && <h3> Не удалось загрузить данные 	</h3>)}
 						</div>
 						<div className="pagination">
 							<button disabled={(currentPage === 1 ? true : false)} className={`button pagination-button ${(currentPage === 1) ? 'disabled' : ''} `} onClick={decrementPage}> ⬅ </button>

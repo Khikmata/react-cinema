@@ -28,7 +28,7 @@ $font-primary: #45a7d4;
 }
 .container{
   margin: 0 auto;
-  max-width: 1400px;
+  max-width: 1320px;
   padding: 0 20px ;
 
 }
@@ -52,7 +52,7 @@ font-size: 16px;
   &-leftside {
       flex: 33%;
       @media(max-width:685px) {
-          display: none;
+
       }
       &__content {
         display: flex;
@@ -107,6 +107,7 @@ font-size: 16px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    margin-right: 40px;
   }
 }
 
@@ -161,8 +162,8 @@ span{
   flex-wrap: wrap;
   justify-content: center;
 }
+
 .anime-card{
-  margin: 0 auto;
   margin-right: 40px;
   width: 200px;
   height: 400px;
@@ -276,20 +277,34 @@ img{
       }
   }
 }
-.search__open{
+.search{
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
-  input{
-    width: 90%;
-    background-color: transparent;
+  transition: all 0.3s ease-in-out;
+    &__box{
+    margin: 0 20px;
+    padding-left: 10px;
+    display: flex;
+    width: 100%;
+    align-items: center;
     border: 1px solid #979797;
     border-radius: 4px;
-    margin-right: 10px;
-    height: 30px;
-  }
+    height: 40px;
+      button{
+      padding: 0 10px;
+      }
+      input {
+      width: 90%;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      margin-right: 10px;
+      height: 100%;
+      }
+    }
 }
 .modal {
   position: fixed;

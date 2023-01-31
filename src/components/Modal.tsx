@@ -47,8 +47,8 @@ const Modal: React.FC = () => {
 
 	return (
 		<div>
-			<div className={`modal ${open ? 'active' : ''}`}>
-				<div className='modal-box' >
+			<div className={`modal ${open ? 'active' : ''}`} onMouseDown={toggleClose}>
+				<div className='modal-box' onMouseDown={(e) => e.stopPropagation()}>
 					<div className="modal-content" >
 						<div className="modal-content__close">
 							<button onClick={toggleClose} className='modal-content__close button button-close'>X</button>
