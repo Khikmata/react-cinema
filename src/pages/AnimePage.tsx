@@ -86,10 +86,12 @@ const AnimePage: React.FC = () => {
 				<div className='watch'>
 					<h2> Watch online </h2>
 					<div className='watch-anime'>
-						<iframe allowFullScreen={true} className='watch-anime__display' width={800} height={500} src={`${watchUrl[0]}`}></iframe>
+						{
+							(watchUrl.length !== 0 && <iframe allowFullScreen={true} className='watch-anime__display' width={800} height={500} src={`${watchUrl[0]}`}></iframe>)
+						}
 						<div className="watch-anime__settings">
-							<button className="episode__modal">{episode[0]}</button>
-							<button className="studio__modal">{quality[0]}</button>
+							<button className="episode__modal button">{episode[0]}</button>
+							<button className="studio__modal button">{quality[0]}</button>
 						</div>
 					</div>
 				</div>

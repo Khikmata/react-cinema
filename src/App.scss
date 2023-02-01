@@ -499,6 +499,7 @@ height: 32px;
   margin-top: 30px;
   &__display{
     border: 0;
+    margin-bottom: -30px;
   }
 }
 
@@ -507,10 +508,14 @@ height: 32px;
     justify-content: space-around;
 
     .episode__modal{
-
+      padding: 10px 40px;
+      border:1px solid #45a7d4;
+      border-radius: 4px;
     }
     .studio__modal{
-
+      padding: 10px 40px;
+        border: 1px solid #45a7d4;
+        border-radius: 4px;
     }
   }
 }
