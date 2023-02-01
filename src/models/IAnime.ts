@@ -78,3 +78,18 @@ export interface IAnimeDetails {
     url?: string;
     otherName?: string;
 }
+
+interface IHeaders {
+    Referer: string
+}
+export interface ISources {
+    url: string;
+    isM3U8: string;
+    quality: string;
+}
+
+export interface IAnimePlayer {
+    download: string;
+    headers: IHeaders;
+    sources: ISources[];
+}

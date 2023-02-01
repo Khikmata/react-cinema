@@ -57,10 +57,6 @@ const HomePage: React.FC = () => {
 		}
 	}
 
-	console.log(currentPage)
-
-
-
 	return (
 		<div className="homepage">
 			<div className={`wrapper ${modalOpen ? 'activeModal' : ''}`}>

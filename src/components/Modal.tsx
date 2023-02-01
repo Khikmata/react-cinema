@@ -3,9 +3,9 @@ import gitIcon from '../assets/images/gitIcon.svg'
 import vkIcon from '../assets/images/vkIcon.svg'
 import googleIcon from '../assets/images/googleIcon.svg'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
-import auth, { fetchUserData } from '../store/reducers/auth';
+import auth, { fetchUserData } from '../store/reducers/authSlice';
 import { stat } from 'fs';
-import { setModalOpen } from '../store/reducers/modal';
+import { setModalOpen } from '../store/reducers/modalSlice';
 
 
 
@@ -21,7 +21,7 @@ const Modal: React.FC = () => {
 	const passRef = useRef(null);
 
 
-	const [isSignUp, setIsSignUp] = useState(true)
+	const [isSignUp, setIsSignUp] = useState(false)
 
 	const { isAuth } = useTypedSelector(state => state.auth)
 
