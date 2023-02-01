@@ -14,9 +14,9 @@ export interface IAnimeData {
 }
 
 interface IEpisodes {
-    id?: string;
-    number?: number;
-    url?: string;
+    id: string;
+    number: number;
+    url: string;
 }
 
 //crunchyroll data
@@ -64,15 +64,15 @@ interface IEpisodes {
 
 
 export interface IAnimeDetails {
-    description?: string;
-    episodes?: IEpisodes[];
-    genres?: string[];
-    id?: string;
-    image?: string;
+    description: string;
+    episodes: IEpisodes[];
+    genres: string[];
+    id: string;
+    image: string;
     releaseDate?: string;
     status?: string;
     subOrDub?: string;
-    title?: string;
+    title: string;
     totalEpisodes?: number;
     type?: string;
     url?: string;

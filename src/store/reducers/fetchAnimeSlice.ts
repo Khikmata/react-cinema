@@ -17,7 +17,7 @@ interface IFetchAnimeInitState {
 }
 
 const initialState: IFetchAnimeInitState = {
-	details: {},
+	details: { description: '', episodes: [], genres: [], id: '', image: '', title: '' },
 	items: [],
 	status: Status.PENDING,
 }

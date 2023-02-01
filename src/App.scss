@@ -175,6 +175,7 @@ img{
     border-radius: 12px;
 }
   &__title{
+    margin-top:5px;
     h3{
       font-size: 14px;
       font-weight: 700;
@@ -494,6 +495,24 @@ height: 32px;
 .watch{
   text-align: center;
 
+&-anime{
+  margin-top: 30px;
+  &__display{
+    border: 0;
+  }
+}
+
+  &-anime__settings{
+    display: flex;
+    justify-content: space-around;
+
+    .episode__modal{
+
+    }
+    .studio__modal{
+
+    }
+  }
 }
 
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, memo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux'
@@ -8,8 +8,9 @@ import { setPlayerSources } from '../store/reducers/animePlayerSlice'
 import fetchAnimeSlice, { setDetails } from '../store/reducers/fetchAnimeSlice'
 import HomePage from './HomePage'
 
-
-
+interface IShow {
+	url: string;
+}
 
 const AnimePage: React.FC = () => {
 
@@ -17,32 +18,45 @@ const AnimePage: React.FC = () => {
 	const { details } = useTypedSelector(state => state.fetchAnimeSlice)
 	const sources = useTypedSelector(state => state.animePlayer.sources)
 
+
+	const [episode, setEpisodes] = useState<string[]>([])
+	const [quality, setQuality] = useState<string[]>([])
+	const [watchUrl, setWatchUrl] = useState<string[]>([])
+
 	const dispatch = useAppDispatch();
 	let { id } = useParams();
 
 
-	useEffect(() => {
-		const fetchAnime = async () => {
-			try {
-				const { data } = await axios.get<IAnimeDetails>(`https://api.consumet.org/anime/gogoanime/info/${id}`)
-				dispatch(setDetails(data))
-			} catch (error) {
-				console.log('error occured while trying to fetch anime page')
-			}
-			try {
-				const url = `https://api.consumet.org/anime/gogoanime/watch/${id}-episode-1`;
-				const { data } = await axios.get<IAnimePlayer>(url, { params: { server: "gogocdn" } })
-				dispatch(setPlayerSources(data.sources))
-				console.log(data.sources)
-			} catch (error) {
-				console.log('error occured while trying to fetch anime page')
-			}
+	const fetchAnime = async () => {
+		try {
+			const responcePage = await axios.get<IAnimeDetails>(`https://api.consumet.org/anime/gogoanime/info/${id}`)
+			setEpisodes(responcePage.data.episodes.map((item) => item.number.toString()));
+			dispatch(setDetails(responcePage.data))
 
+			const watchUrl = `https://api.consumet.org/anime/gogoanime/servers/${id}-episode-${responcePage.data.episodes[0].number}`
+			const responseAnime = await axios.get<IShow[]>(watchUrl);
+			setWatchUrl(responseAnime.data.map((item) => item.url));
+
+			//const url = `https://api.consumet.org/anime/gogoanime/servers/${id}-episode-${responcePage.data.episodes[0].number}`;
+			//console.log(1)
+			//const responsePlayer = await axios.get<IAnimePlayer>(url, { params: { server: "streamsb" } })
+			//console.log(1)
+			//setQuality(responsePlayer.data.sources.map((item) => item.quality));
+			//console.log(1)
+			//dispatch(setPlayerSources(responsePlayer.data.sources))
+
+		} catch (error) {
+			console.log('error occured while trying to fetch anime player')
 		}
-		fetchAnime()
+	}
 
+	const urls = sources.map((item) => item.url)
+
+	useEffect(() => {
+		fetchAnime();
 	}, [])
-	console.log(sources)
+
+	console.log(watchUrl)
 	return (
 		<div className='wrapper'>
 			<div className='container'>
@@ -70,16 +84,12 @@ const AnimePage: React.FC = () => {
 					</div>
 				</div>
 				<div className='watch'>
-					<h2> Watch now </h2>
+					<h2> Watch online </h2>
 					<div className='watch-anime'>
-						<video width={320} height={240} controls>
-							{
-								(sources && <source src={`{sources[5].url}`} type="video/m3u8" />)
-							}
-						</video>
+						<iframe allowFullScreen={true} className='watch-anime__display' width={800} height={500} src={`${watchUrl[0]}`}></iframe>
 						<div className="watch-anime__settings">
-							<div className="episode__modal">1</div>
-							<div className="studio__modal">lmaos</div>
+							<button className="episode__modal">{episode[0]}</button>
+							<button className="studio__modal">{quality[0]}</button>
 						</div>
 					</div>
 				</div>
@@ -89,7 +99,7 @@ const AnimePage: React.FC = () => {
 					<Link to={'/'}>BACK</Link>
 				</button>
 			</div>
-		</div>
+		</div >
 
 	)
 

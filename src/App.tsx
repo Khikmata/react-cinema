@@ -8,6 +8,7 @@ import fetchAnimeSlice, { setItem } from "./store/reducers/fetchAnimeSlice";
 import SearchPage from "./pages/SearchPage";
 
 const App: React.FC = () => {
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
