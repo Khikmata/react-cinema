@@ -74,7 +74,7 @@ const HomePage: React.FC = () => {
 								items.map((item: IAnimeData, id: number) => (
 									(<div className='anime-card' key={id}>
 										<Link to={`/anime/${item.id}`} className="anime-card__img">
-											<img src={`${item.image}`} width={200} height={300} />
+											<img src={`${item.image}`} />
 										</Link>
 										<div className="anime-card__title">
 											<h3>{item.title}</h3>

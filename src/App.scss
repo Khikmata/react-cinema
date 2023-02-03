@@ -34,8 +34,11 @@ li{
 .container{
   margin: 0 auto;
   max-width: 1320px;
-  padding: 0 20px ;
-
+  padding:0 20px ;
+position: relative;
+@media(max-width:500px){
+  padding: 0 0px 0 0;
+}
 }
 h1,h2{
   font-size: 24px;
@@ -48,10 +51,12 @@ font-size: 16px;
 }
 
 .header{
+  width: 100%;
+  max-width: 1320px;
+  position: fixed;
+  z-index: 100;
+  background-color:#1e1e22;
   padding: 0 40px;
-        @media(max-width:630px) {
-            padding: 0 10px;
-          }
   height: 100px;
   display: flex;
   &-leftside {
@@ -73,20 +78,71 @@ font-size: 16px;
       }
     }
   &-center {
+    position: relative;
   flex: 34%;
   text-align: center;
   max-width: 600px;
   padding: 0px 20px;
+  @media(max-width: 600px){
+padding: 0;
+
+  }
+  .burger{
+    height: 100%;
+    width: 100%;
+    display: none;
+    cursor: pointer;
+    @media(max-width:700px){
+    display: block;
+    background-color: transparent;
+    border: none;
+      span  {
+
+          position: absolute;
+        &:first-child{
+          top: 50%;
+          right: 10%;
+          width: 30px;
+          height: 2px;
+          background-color: #d8d8d8;
+        }
+        &:nth-child(2){
+          top: calc(50% - 10px);
+          right: 10%;
+          width: 30px;
+          height: 2px;
+          background-color: #d8d8d8;
+        }
+        &:nth-child(3){
+          top: calc(50% + 10px);
+          right: 10%;
+          width: 30px;
+          height: 2px;
+          background-color: #d8d8d8;
+        }
+
+      }
+    }
+  }
     &__links {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     height: 100%;
+    @media (max-width: 700px){
+      //display: none;
+    }
+    @media (max-width: 700px) {
+      display: none;
+      flex-direction: column;
+    }
     &.search-active{
     display: block;
     position: relative;
+
     }
     li {
+
       a{
       text-decoration: none;
       color: white;
@@ -115,14 +171,47 @@ font-size: 16px;
     justify-content: flex-end;
     align-items: center;
     margin-right: 40px;
+    @media(max-width: 1025px) {
+    margin-right: 0px;
+    }
   }
 }
 
 
+.burger__modal{
+  &.active{
+    
+    position: fixed;
+    left: 0;
+    top:0;
+    background-color: #1e1e22;
+    width: 100vw;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    top: 100px;
+    li{
 
+      width: 100%;
+      text-align: center;
+      margin: 4px 0;
+      a {
+        &:hover{
+          color: #45a7d4;
+        }
+        text-decoration: none;
 
+        }
+    }
+  }
+}
 
-
+main{
+ position: relative;
+  padding: 130px 0 40px;
+}
 span{
   color:rgba(216, 216, 216, 0.4);
 }
@@ -171,14 +260,28 @@ span{
 }
 
 .anime-card{
-  margin-right: 40px;
+  margin: 0px 20px;
   width: 200px;
   height: 400px;
   cursor: pointer;
   overflow: hidden;
-img{
-    border-radius: 12px;
-}
+          @media(max-width:520px) {
+              width: 100px;
+              height: 150px;
+            }
+  &__img{
+    display: block;
+    width: 100%;
+    height: 80%;
+
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        object-fit: fill;
+      }
+  }
+
   &__title{
     margin-top:5px;
     h3{
@@ -198,8 +301,12 @@ img{
     }
 }
 .main-hot__title{
-  padding: 40px 40px;
+  padding: 40px 60px;
+  font-size: 24px;
     color: #45a7d4;
+    @media(max-width: 1025px){
+      text-align: center;
+    }
 }
 
 .background {
@@ -222,8 +329,8 @@ img{
     border: 1px solid #5985ff;
     background-color: #5985ff;
     border-radius: 10px;
-    padding: 10px 30px;
-    
+    width: 70px;
+    height: 40px;
   }
   &:active{
     background-color: #83a4ff;
@@ -273,8 +380,10 @@ img{
       position: absolute;
       display: block;
       border-bottom: 0px;
-     left: 10px;
      top: 40%;
+     path{
+       fill: #979797;
+     }
     }
     &:active {
         border: 1px solid rgba(151, 151, 151, 0.3);
@@ -303,7 +412,7 @@ img{
   height: 100%;
   width: 100%;
   transition: all 0.3s ease-in-out;
-  
+  padding: 0 20px;
     &__box{
     padding-left: 40px;
     display: flex;
@@ -312,6 +421,7 @@ img{
     border: 1px solid #979797;
     border-radius: 4px;
     height: 40px;
+    box-shadow: 0px 3px 10px rgba(69, 109, 212, 0.3);
       button{
       padding: 0 10px;
       }
@@ -351,6 +461,7 @@ img{
     background-color: #272a33;
     width: 360px;
     min-height: 450px;
+
 .input__box {
     font-size: 16px;
   }
@@ -463,6 +574,7 @@ height: 32px;
     
       &-rightside {
         padding: 20px 40px;
+
         flex: 75%;
         h1{
               max-width: 100%;
@@ -572,10 +684,22 @@ height: 32px;
     }
   }
 }
+.searchPage{
+  padding: 100px 40px;
+  &__results{
+    padding: 100px 20px 40px;
+    h2{
 
+    }
+  }
+}
 
 .pagination{
+  display: flex;
   padding: 0 40px 40px;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
 }
 
 

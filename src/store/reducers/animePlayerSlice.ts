@@ -1,4 +1,4 @@
-import { ISources } from './../../models/IAnime';
+import { ISources, IAnimePlayer } from './../../models/IAnime';
 import { createSlice } from '@reduxjs/toolkit';
 
 
