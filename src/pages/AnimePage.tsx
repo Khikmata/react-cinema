@@ -19,13 +19,15 @@ const AnimePage: React.FC = () => {
 	const sources = useTypedSelector(state => state.animePlayer.sources)
 
 
-	const [episode, setEpisodes] = useState<string[]>([])
+	const [episodes, setEpisodes] = useState<string[]>([])
+	const [currentEpisode, setCurrentEpisode] = useState(1);
 	const [quality, setQuality] = useState<string[]>([])
 	const [watchUrl, setWatchUrl] = useState<string[]>([])
 
 	const dispatch = useAppDispatch();
 	let { id } = useParams();
 
+	const [openEpisodeModal, setOpenEpisodeModal] = useState(false);
 
 	const fetchAnime = async () => {
 		try {
@@ -33,7 +35,7 @@ const AnimePage: React.FC = () => {
 			setEpisodes(responcePage.data.episodes.map((item) => item.number.toString()));
 			dispatch(setDetails(responcePage.data))
 
-			const watchUrl = `https://api.consumet.org/anime/gogoanime/servers/${id}-episode-${responcePage.data.episodes[0].number}`
+			const watchUrl = `https://api.consumet.org/anime/gogoanime/servers/${id}-episode-${currentEpisode}`
 			const responseAnime = await axios.get<IShow[]>(watchUrl);
 			setWatchUrl(responseAnime.data.map((item) => item.url));
 
@@ -50,13 +52,13 @@ const AnimePage: React.FC = () => {
 		}
 	}
 
+	console.log(currentEpisode)
 	const urls = sources.map((item) => item.url)
 
 	useEffect(() => {
 		fetchAnime();
-	}, [])
+	}, [currentEpisode])
 
-	console.log(watchUrl)
 	return (
 		<div className='wrapper'>
 			<div className='container'>
@@ -87,11 +89,13 @@ const AnimePage: React.FC = () => {
 					<h2> Watch online </h2>
 					<div className='watch-anime'>
 						{
-							(watchUrl.length !== 0 && <iframe allowFullScreen={true} className='watch-anime__display' width={800} height={500} src={`${watchUrl[0]}`}></iframe>)
+							(watchUrl.length !== 0
+								? <iframe allowFullScreen={true} height={450} width={800} className='watch-anime__display' scrolling="no" src={`${watchUrl[0]}`}></iframe>
+								: <iframe allowFullScreen={true} className='watch-anime__display' src={``}></iframe>)
 						}
 						<div className="watch-anime__settings">
-							<button className="episode__modal button">{episode[0]}</button>
-							<button className="studio__modal button">{quality[0]}</button>
+							<div className='episode-list'><ul>{episodes.map((ep, id) => <li key={id} className={`${id + 1 === currentEpisode ? 'episode__active' : ''}`} onClick={() => setCurrentEpisode(id + 1)}>{ep}</li>)}</ul></div>
+							{/* <button className="studio__modal button">{details.episodes.map((eo))}</button> */}
 						</div>
 					</div>
 				</div>
