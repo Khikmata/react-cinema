@@ -443,7 +443,7 @@ span{
   width: 100vw;
   background-color: rgba(0, 0, 0, 0.4);
   opacity: 0;
-
+z-index: 10000;
   display: flex;
   justify-content: center;
   align-items: center;

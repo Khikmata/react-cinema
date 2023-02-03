@@ -67,7 +67,7 @@ const HomePage: React.FC = () => {
 					<Header />
 					<main>
 						{/* <BackgroundSlider images={images} interval={interval} items={items} /> */}
-						<h2 className='main-hot__title'>{searchValue !== '' ? 'Search results' : 'Popular'}</h2>
+						<h2 className='main-hot__title'>{searchValue !== '' ? 'Search results' : 'Popular anime'}</h2>
 						<div className="carts">
 							{isLoading && [...new Array(10)].map((_, index) => <Skeleton key={index} />)}
 							{(items.length !== 0 && isLoading === false &&
