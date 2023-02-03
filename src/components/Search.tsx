@@ -16,14 +16,18 @@ const Search = () => {
 	const items = useTypedSelector(state => state.fetchAnimeSlice.items)
 
 	const toggleSearch = () => {
+
 		dispatch(setSearchValue(''))
 		dispatch(setSearchOpen(!isSearchOpen))
 	}
 
-	const redirectToSearchPage = () => {
-		if (searchInputValue !== '') {
+	const redirectToSearchPage = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		console.log(e)
+		if (e.keyCode === 13 && searchInputValue !== '') {
 			navigate('/search')
+
 		}
+
 		console.log('something hpd')
 	}
 
@@ -33,6 +37,7 @@ const Search = () => {
 	}, 600);
 
 	useEffect(() => {
+		inputRef.current?.focus();
 		handleSearchInput(searchInputValue)
 	}, [searchInputValue])
 
@@ -42,7 +47,7 @@ const Search = () => {
 		<div className='search'>
 			<div className='search__box' >
 				<input ref={inputRef} value={searchInputValue} placeholder='Поиск' onChange={(e) => setSearchInputValue(e.target.value)} className='searchbar'></input>
-				<button type={'submit'} onSubmit={() => redirectToSearchPage} onClick={toggleSearch} className='search-button button'>
+				<button type={'submit'} onKeyDown={(e) => (e: React.KeyboardEvent<HTMLInputElement>) => redirectToSearchPage(e)} onSubmit={() => redirectToSearchPage} onClick={toggleSearch} className='search-button button'>
 					{/* {<Link to={`/Search`}> x </Link>} */}
 					X
 				</button>
