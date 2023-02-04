@@ -16,6 +16,7 @@ const SearchPage = () => {
 	const items = useTypedSelector(state => state.fetchAnimeSlice.items)
 	const [currentPage, setCurrentPage] = useState(1);
 
+
 	const incrementPage = () => {
 		setCurrentPage(currentPage + 1);
 	}
@@ -26,6 +27,7 @@ const SearchPage = () => {
 	}
 	useEffect(() => {
 		setIsLoading(true)
+
 		const fetchItems = async () => {
 			try {
 				let response;
@@ -68,6 +70,7 @@ const SearchPage = () => {
 
 						{(!isLoading && items.length === 0 && <h3> Не удалось загрузить данные 	</h3>)}
 					</div>
+					FILTERS .....
 				</div>
 				<div className="pagination">
 					<button disabled={(currentPage === 1 ? true : false)} className={`button pagination-button ${(currentPage === 1) ? 'disabled' : ''} `} onClick={decrementPage}> ⬅ </button>

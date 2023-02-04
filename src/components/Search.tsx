@@ -21,14 +21,11 @@ const Search = () => {
 		dispatch(setSearchOpen(!isSearchOpen))
 	}
 
-	const redirectToSearchPage = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		console.log(e)
-		if (e.keyCode === 13 && searchInputValue !== '') {
-			navigate('/search')
-
+	const redirectToSearchPage = (e: any) => {
+		if (e.keyCode === 13) {
+			navigate('/search');
 		}
 
-		console.log('something hpd')
 	}
 
 
@@ -46,8 +43,8 @@ const Search = () => {
 	return (
 		<div className='search'>
 			<div className='search__box' >
-				<input ref={inputRef} value={searchInputValue} placeholder='Поиск' onChange={(e) => setSearchInputValue(e.target.value)} className='searchbar'></input>
-				<button type={'submit'} onKeyDown={(e) => (e: React.KeyboardEvent<HTMLInputElement>) => redirectToSearchPage(e)} onSubmit={() => redirectToSearchPage} onClick={toggleSearch} className='search-button button'>
+				<input ref={inputRef} onKeyDown={(e) => redirectToSearchPage(e)} value={searchInputValue} placeholder='Поиск' onChange={(e) => setSearchInputValue(e.target.value)} className='searchbar'></input>
+				<button type={'submit'} onClick={toggleSearch} className='search-button button'>
 					{/* {<Link to={`/Search`}> x </Link>} */}
 					X
 				</button>

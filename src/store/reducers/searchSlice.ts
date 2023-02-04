@@ -2,11 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 interface ISearchState {
 	isSearchOpen: boolean;
 	searchValue: string;
+	searchInputValue: string;
 }
 
 
 const initialState: ISearchState = {
 	isSearchOpen: false,
+	searchInputValue: '',
 	searchValue: '',
 }
 
@@ -20,10 +22,13 @@ const search = createSlice({
 		},
 		setSearchValue: (state, action) => {
 			state.searchValue = action.payload;
+		},
+		setSearchInputValue: (state, action) => {
+			state.searchValue = action.payload;
 		}
 	}
 });
 
-export const { setSearchOpen, setSearchValue } = search.actions;
+export const { setSearchOpen, setSearchValue, setSearchInputValue } = search.actions;
 
 export default search.reducer;
