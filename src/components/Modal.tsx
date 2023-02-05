@@ -5,7 +5,7 @@ import googleIcon from '../assets/images/googleIcon.svg'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
 import auth, { fetchUserData } from '../store/reducers/authSlice';
 import { stat } from 'fs';
-import { setModalOpen } from '../store/reducers/modalSlice';
+import { setModalOpen } from '../store/reducers/authModalSlice';
 
 
 

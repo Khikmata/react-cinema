@@ -4,70 +4,107 @@ import { Link, useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux'
 import { IAnimeData, IAnimeDetails, IAnimePlayer, ISources } from '../models/IAnime'
-import { setPlayerSources } from '../store/reducers/animePlayerSlice'
-import fetchAnimeSlice, { setDetails } from '../store/reducers/fetchAnimeSlice'
+import { fetchAnimePlayer, setPlayerSources } from '../store/reducers/animePlayerSlice'
+import { fetchCommentsData, getAllComments } from '../store/reducers/CommentSlice'
+import fetchAnimeSlice, { fetchAnimeById, setDetails } from '../store/reducers/fetchAnimeSlice'
 import HomePage from './HomePage'
 
-interface IShow {
-	url: string;
-}
 
 const AnimePage: React.FC = () => {
 
 
+
 	const { details } = useTypedSelector(state => state.fetchAnimeSlice)
-	const sources = useTypedSelector(state => state.animePlayer.sources)
+	const { sources } = useTypedSelector(state => state.animePlayer)
+	const { items } = useTypedSelector(state => state.comment.comments)
 
 	const [isLoading, setIsLoading] = useState(true)
 	const [episodes, setEpisodes] = useState<string[]>([])
 	const [currentEpisode, setCurrentEpisode] = useState(1);
-	const [quality, setQuality] = useState<string[]>([])
-	const [watchUrl, setWatchUrl] = useState<string[]>([])
 
 	const dispatch = useAppDispatch();
 	let { id } = useParams();
 
-	const fetchAnime = async () => {
+
+
+	const fetchComments = () => {
 		try {
 			setIsLoading(true);
-			const responcePage = await axios.get<IAnimeDetails>(`https://api.consumet.org/anime/gogoanime/info/${id}`)
-			setEpisodes(responcePage.data.episodes.map((item) => item.number.toString()));
-			dispatch(setDetails(responcePage.data))
-
-			const watchUrl = `https://api.consumet.org/anime/gogoanime/servers/${id}-episode-${currentEpisode}`
-			const responseAnime = await axios.get<IShow[]>(watchUrl);
-			setWatchUrl(responseAnime.data.map((item) => item.url));
+			dispatch(fetchCommentsData());
+		} catch (error) {
+			console.log('error occured while trying to fetch comments')
 			setIsLoading(false);
-			//const url = `https://api.consumet.org/anime/gogoanime/servers/${id}-episode-${responcePage.data.episodes[0].number}`;
-			//console.log(1)
-			//const responsePlayer = await axios.get<IAnimePlayer>(url, { params: { server: "streamsb" } })
-			//console.log(1)
-			//setQuality(responsePlayer.data.sources.map((item) => item.quality));
-			//console.log(1)
-			//dispatch(setPlayerSources(responsePlayer.data.sources))
+		}
+	}
+
+	const fetchByID = () => {
+		try {
+			dispatch(fetchAnimeById(id ? id : ''));
+			setEpisodes(details.episodes.map((item) => item.number.toString()));
+			dispatch(setDetails(details))
 
 		} catch (error) {
+			console.log('error occured while trying to fetch anime page')
+			setIsLoading(false);
+		}
+	}
+
+	const fetchPlayer = () => {
+		try {
+			if (id && currentEpisode) {
+				dispatch(fetchAnimePlayer({ id, currentEpisode }))
+			}
+			setIsLoading(false);
+		} catch (err) {
 			console.log('error occured while trying to fetch anime player')
 			setIsLoading(false);
 		}
 	}
 
-	console.log(watchUrl)
 
 	useEffect(() => {
-		fetchAnime();
-	}, [currentEpisode])
+		window.addEventListener('scroll', handleScroll, { passive: true });
+		fetchComments();
+		fetchByID();
+
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, [])
+	useEffect(() => {
+		if (details.episodes.length !== 0) {
+			fetchPlayer();
+			console.log(sources)
+		}
+	}, [items, details])
+
+
+	const [scrollPosition, setScrollPosition] = useState(0);
+
+	const handleScroll = () => {
+		const position = window.pageYOffset;
+		setScrollPosition(position);
+	};
+
+	console.log(scrollPosition);
+
+
+
 
 	return (
 		<div className='wrapper'>
 			<div className='container'>
 				<Header />
+				<div className={`back-slider${scrollPosition > 400 ? ' slide' : ''}`}>
+					<Link to={'/'} className={`button back-button `}>
+						<h2>
+							✖
+						</h2>
+					</Link>
+				</div>
 				<div className="anime-page">
-					<div className='button back-button'>
-						<Link to={'/'} >
-							GO BACK
-						</Link>
-					</div>
+
 					<div className="content">
 
 						<div className="content-leftside">
@@ -91,30 +128,55 @@ const AnimePage: React.FC = () => {
 							</div>
 						</div>
 					</div>
+					<article>
+						<div className='description-mobile'><span>Description:</span> <br /><h2>{details.description} </h2></div>
+					</article>
 					<div className='watch'>
 						<h2> Watch online </h2>
 						<div className='watch-anime'>
 							{
-								(watchUrl.length === 0
+								(sources.length === 0
 									? <div className='watch-anime__placeholder'></div>
-									: <iframe allowFullScreen={true} height={450} width={800} className='watch-anime__display' scrolling="no" src={`${watchUrl[0]}`}></iframe>
+									: <div className='watch-anime__container'>
+										<iframe allowFullScreen={true} height={450} width={800} className='watch-anime__display' scrolling="no" src={`${sources[0]}`}></iframe>
+									</div>
 								)
 							}
 							{
-								(!isLoading && watchUrl.length === 0 && <h2> Плеер не доступен </h2>)
+								(!isLoading && sources.length === 0 && <h2> Плеер не доступен </h2>)
 							}
 							<div className="watch-anime__settings">
-								<div className='episode-list'><ul>{episodes.map((ep, id) => <li key={id} className={`${id + 1 === currentEpisode ? 'episode__active' : ''}`} onClick={() => setCurrentEpisode(id + 1)}>{ep}</li>)}</ul></div>
-								{/* <button className="studio__modal button">{details.episodes.map((eo))}</button> */}
+								<div className='episode-list'>
+									<ul>
+										{episodes.map((ep, id) =>
+											<li key={id} className={`${id + 1 === currentEpisode ? 'episode__active' : ''}`}
+												onClick={() => setCurrentEpisode(id + 1)}>{ep}
+											</li>
+										)}
+									</ul>
+								</div>
 							</div>
 						</div>
+					</div >
+
+					<div className="comment-section">
+						<h2 className='comment-title'>Comments</h2>
+						{
+							(items && items.map((comment) =>
+								<div className='comment-section__comment'>
+									<img className='comment-avatar' src={`${comment.user.avatarUrl}`} />
+									<div className='comment-text'>
+										<h2>{comment.user.userName}</h2>
+										<p>{comment.text}</p>
+									</div>
+									<p className='comment-likes'>{comment.likesCount}</p>
+									<p>+</p>
+								</div>
+							))}
 					</div>
-				</div>
-			</div>
+				</div >
+			</div >
 		</div >
-
 	)
-
 }
-
-export default AnimePage
+export default AnimePage;

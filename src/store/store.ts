@@ -2,9 +2,11 @@ import fetchAnimeSlice from './reducers/fetchAnimeSlice';
 import { configureStore } from "@reduxjs/toolkit"
 import { combineReducers } from "redux"
 import auth from './reducers/authSlice';
-import modal from './reducers/modalSlice';
+import modal from './reducers/authModalSlice';
 import search from './reducers/searchSlice';
 import animePlayer from './reducers/animePlayerSlice';
+import comment from './reducers/CommentSlice';
+
 
 const rootReducer = combineReducers({
     fetchAnimeSlice,
@@ -12,6 +14,7 @@ const rootReducer = combineReducers({
     modal,
     search,
     animePlayer,
+    comment,
 })
 
 export const store = configureStore({

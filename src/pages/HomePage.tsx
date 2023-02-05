@@ -40,6 +40,7 @@ const HomePage: React.FC = () => {
 				dispatch(setItem(response.data.results))
 				setIsLoading(false);
 			} catch (error) {
+				setIsLoading(false);
 				<h3>Произошла ошибка в загрузке данных</h3>
 			}
 

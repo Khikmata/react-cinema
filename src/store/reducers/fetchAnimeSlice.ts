@@ -22,6 +22,16 @@ const initialState: IFetchAnimeInitState = {
 	status: Status.PENDING,
 }
 
+
+export const fetchAnimes = createAsyncThunk('anime/fetchAnimes', async () => {
+	const { data } = await axios.get<IAnimeDetails>(`https://api.consumet.org/anime/gogoanime/top-airing/`)
+})
+export const fetchAnimeById = createAsyncThunk('anime/fetchAnimeById', async (id: string) => {
+	const { data } = await axios.get<IAnimeDetails>(`https://api.consumet.org/anime/gogoanime/info/${id}`);
+	return data;
+})
+
+
 export const fetchAnimeSlice = createSlice({
 	name: 'animeFetchStatus',
 	initialState,
@@ -33,7 +43,19 @@ export const fetchAnimeSlice = createSlice({
 			state.details = action.payload;
 		},
 	},
-
+	extraReducers: (builder) => {
+		builder
+			.addCase(fetchAnimeById.pending, (state) => {
+				state.status = Status.PENDING;
+			})
+			.addCase(fetchAnimeById.fulfilled, (state, action) => {
+				state.details = action.payload;
+				state.status = Status.FULFILLED;
+			})
+			.addCase(fetchAnimeById.rejected, (state) => {
+				state.status = Status.REJECTED;
+			})
+	}
 });
 
 export const { setItem, setDetails } = fetchAnimeSlice.actions;

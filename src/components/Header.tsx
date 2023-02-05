@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
 import { useDebounce } from '../hooks/useDebounce';
-import { setModalOpen } from '../store/reducers/modalSlice';
+import { setModalOpen } from '../store/reducers/authModalSlice';
 import { setSearchOpen, setSearchValue } from '../store/reducers/searchSlice';
 import Search from './Search';
 
@@ -24,6 +24,7 @@ const Header: React.FC = () => {
 	const { isSearchOpen } = useTypedSelector(state => state.search);
 
 	const toggleSearch = () => {
+		dispatch(setSearchValue(''))
 		dispatch(setSearchOpen(!isSearchOpen));
 		(document.body.classList.add("activeSearch"));
 	}
@@ -54,7 +55,7 @@ const Header: React.FC = () => {
 			}
 			<div className="header-leftside">
 				<div className='header-leftside__content'>
-					<h1><Link className='logo' to={'/'}>React Anime</Link></h1>
+					<h1><Link onClick={toggleSearch} className='logo' to={'/'}>React Anime</Link></h1>
 				</div>
 			</div>
 			<div className="header-center">
