@@ -1,10 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import axios from "axios";
 
-export const fetchUserData = createAsyncThunk('/auth/register', async (params) => {
-	const { data } = await axios.post('/auth/login', params);
-	return data;
-})
+
 
 export enum Status {
 	PENDING = 'pending',
@@ -12,19 +9,34 @@ export enum Status {
 	REJECTED = 'rejected',
 }
 
+
+interface IData {
+	userName: string;
+	password: string;
+	email: string;
+}
+
 interface AuthState {
 	isAuth: boolean;
-	data: any;
+	data: IData[];
 	status: Status;
 }
 
 
 const initialState: AuthState = {
 	isAuth: false,
-	data: null,
+	data: [],
 	status: Status.PENDING,
 }
 
+export const register = createAsyncThunk('/auth/register', async (props: IData) => {
+	const { data } = await axios.get('http://localhost:4444/register');
+	return data;
+})
+export const login = createAsyncThunk('/auth/login', async () => {
+	const { data } = await axios.get('http://localhost:4444/login');
+	return data;
+})
 
 const auth = createSlice({
 	name: 'authStatus',
@@ -36,13 +48,14 @@ const auth = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(Status.PENDING, (state, action) => {
+			.addCase(register.pending, (state, action) => {
 				console.log('loading');
 			})
-			.addCase(Status.FULFILLED, (state, action) => {
+			.addCase(register.fulfilled, (state, action) => {
+				state.data = action.payload;
 				console.log('fulfilled');
 			})
-			.addCase(Status.REJECTED, (state, action) => {
+			.addCase(register.rejected, (state, action) => {
 				console.log('rejected');
 			})
 	}

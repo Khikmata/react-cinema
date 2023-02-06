@@ -3,7 +3,7 @@ import gitIcon from '../assets/images/gitIcon.svg'
 import vkIcon from '../assets/images/vkIcon.svg'
 import googleIcon from '../assets/images/googleIcon.svg'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
-import auth, { fetchUserData } from '../store/reducers/authSlice';
+import auth, { login, register } from '../store/reducers/authSlice';
 import { stat } from 'fs';
 import { setModalOpen } from '../store/reducers/authModalSlice';
 
@@ -13,7 +13,7 @@ const Modal: React.FC = () => {
 
 
 	const [email, setEmail] = useState('')
-	const [username, setUsername] = useState('')
+	const [userName, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 
 	const emailRef = useRef(null);
@@ -41,8 +41,8 @@ const Modal: React.FC = () => {
 	}
 
 	const Auth = () => {
-
-		console.log(`email: ${email}, username: ${username}, password: ${password}`)
+		isSignUp ? dispatch(register({ email, password, userName })) : dispatch(login());
+		console.log(`email: ${email}, userName: ${userName}, password: ${password}`)
 	}
 
 	return (
@@ -60,7 +60,7 @@ const Modal: React.FC = () => {
 						)}
 						<div className='modal-content__input'>
 							<p>Username</p>
-							<input onKeyDown={(e) => handleKeypress(e)} ref={userRef} value={username} onChange={e => setUsername(e.target.value)} className='input__box' ></input>
+							<input onKeyDown={(e) => handleKeypress(e)} ref={userRef} value={userName} onChange={e => setUsername(e.target.value)} className='input__box' ></input>
 						</div>
 						<div className='modal-content__input'>
 							<p>Password</p>

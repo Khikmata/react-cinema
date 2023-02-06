@@ -690,7 +690,10 @@ margin-bottom: 100px;
   position: relative;
   overflow: hidden;
   width: 90%;
-  padding-top: 60.25%;
+  padding-top: 50.25%;
+    @media(max-width: 700px) {
+          padding-top: 60.25%;
+      }
 }
 
 iframe{

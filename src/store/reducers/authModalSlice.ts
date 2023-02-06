@@ -1,4 +1,6 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 interface IModalState {
 	isModalOpen: boolean;
 }
@@ -8,6 +10,7 @@ const initialState: IModalState = {
 	isModalOpen: false,
 
 }
+
 
 
 const modal = createSlice({
