@@ -26,15 +26,15 @@ const AnimePage: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { id } = useParams();
 
-	const fetchComments = () => {
-		try {
-			setIsLoading(true);
-			dispatch(fetchCommentsData());
-		} catch (error) {
-			console.log('error occured while trying to fetch comments', error)
-			setIsLoading(false);
-		}
-	}
+	//const fetchComments = () => {
+	//	try {
+	//		setIsLoading(true);
+	//		dispatch(fetchCommentsData());
+	//	} catch (error) {
+	//		console.log('error occured while trying to fetch comments', error)
+	//		setIsLoading(false);
+	//	}
+	//}
 
 	const fetchByID = () => {
 		try {
