@@ -26,8 +26,6 @@ const AnimePage: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { id } = useParams();
 
-
-
 	const fetchComments = () => {
 		try {
 			setIsLoading(true);
@@ -102,7 +100,6 @@ const AnimePage: React.FC = () => {
 		<div className='wrapper'>
 			<div className='container'>
 				<Header />
-				{<Modal />}
 				<div className={`back-slider${scrollPosition > 400 ? ' slide' : ''}`}>
 					<Link to={'/'} className={`button back-button `}>
 						<h2>
