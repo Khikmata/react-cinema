@@ -32,7 +32,7 @@ const initialState: commentState = {
 }
 
 export const fetchCommentsData = createAsyncThunk('/comments/fetchAllComments', async () => {
-	const { data } = await axios.get('http://localhost:4444/comments');
+	const { data } = await axios.get(`${process.env.REACT_APP_API_URL}`);
 	return data;
 })
 
