@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState, memo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Header from '../components/Header'
+import Modal from '../components/Modal'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux'
 import { IAnimeData, IAnimeDetails, IAnimePlayer, ISources } from '../models/IAnime'
 import { fetchAnimePlayer, setPlayerSources } from '../store/reducers/animePlayerSlice'
@@ -23,7 +24,7 @@ const AnimePage: React.FC = () => {
 	const [currentEpisode, setCurrentEpisode] = useState(1);
 
 	const dispatch = useAppDispatch();
-	let { id } = useParams();
+	const { id } = useParams();
 
 
 
@@ -32,7 +33,7 @@ const AnimePage: React.FC = () => {
 			setIsLoading(true);
 			dispatch(fetchCommentsData());
 		} catch (error) {
-			console.log('error occured while trying to fetch comments')
+			console.log('error occured while trying to fetch comments', error)
 			setIsLoading(false);
 		}
 	}
@@ -40,11 +41,11 @@ const AnimePage: React.FC = () => {
 	const fetchByID = () => {
 		try {
 			dispatch(fetchAnimeById(id ? id : ''));
-			setEpisodes(details.episodes.map((item) => item.number.toString()));
+
 			dispatch(setDetails(details))
 
 		} catch (error) {
-			console.log('error occured while trying to fetch anime page')
+			console.log('error occured while trying to fetch anime page', error)
 			setIsLoading(false);
 		}
 	}
@@ -55,18 +56,18 @@ const AnimePage: React.FC = () => {
 				dispatch(fetchAnimePlayer({ id, currentEpisode }))
 			}
 			setIsLoading(false);
-		} catch (err) {
-			console.log('error occured while trying to fetch anime player')
+		} catch (error) {
+			console.log('error occured while trying to fetch anime player', error)
 			setIsLoading(false);
 		}
 	}
 
 
 	useEffect(() => {
+
 		window.addEventListener('scroll', handleScroll, { passive: true });
 		fetchComments();
 		fetchByID();
-
 
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
@@ -77,7 +78,13 @@ const AnimePage: React.FC = () => {
 			fetchPlayer();
 			console.log(sources)
 		}
-	}, [items, details])
+	}, [items, details, currentEpisode])
+
+
+	useEffect(() => {
+		setEpisodes(details.episodes.map((item) => item.number.toString()));
+		console.log(episodes)
+	}, [details])
 
 
 	const [scrollPosition, setScrollPosition] = useState(0);
@@ -87,7 +94,6 @@ const AnimePage: React.FC = () => {
 		setScrollPosition(position);
 	};
 
-	console.log(scrollPosition);
 
 
 
@@ -96,6 +102,7 @@ const AnimePage: React.FC = () => {
 		<div className='wrapper'>
 			<div className='container'>
 				<Header />
+				{<Modal />}
 				<div className={`back-slider${scrollPosition > 400 ? ' slide' : ''}`}>
 					<Link to={'/'} className={`button back-button `}>
 						<h2>
@@ -148,7 +155,7 @@ const AnimePage: React.FC = () => {
 							<div className="watch-anime__settings">
 								<div className='episode-list'>
 									<ul>
-										{episodes.map((ep, id) =>
+										{episodes && episodes.map((ep, id) =>
 											<li key={id} className={`${id + 1 === currentEpisode ? 'episode__active' : ''}`}
 												onClick={() => setCurrentEpisode(id + 1)}>{ep}
 											</li>
@@ -164,7 +171,7 @@ const AnimePage: React.FC = () => {
 						{
 							(items && items.map((comment) =>
 								<div className='comment-section__comment'>
-									<img className='comment-avatar' src={`${comment.user.avatarUrl}`} />
+									{comment && <img className='comment-avatar' src={`${comment.user.avatarUrl}`} />}
 									<div className='comment-text'>
 										<h2>{comment.user.userName}</h2>
 										<p>{comment.text}</p>

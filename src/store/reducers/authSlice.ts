@@ -10,31 +10,37 @@ export enum Status {
 }
 
 
-interface IData {
+export interface IDataRegister {
 	userName: string;
 	password: string;
 	email: string;
 }
 
+export interface IDataLogin {
+	userName: string;
+	password: string;
+}
+
 interface AuthState {
 	isAuth: boolean;
-	data: IData[];
+	data: IDataRegister;
 	status: Status;
 }
 
+const nullValue = { userName: '', password: "", email: "" };
 
 const initialState: AuthState = {
 	isAuth: false,
-	data: [],
+	data: nullValue,
 	status: Status.PENDING,
 }
 
-export const register = createAsyncThunk('/auth/register', async (props: IData) => {
-	const { data } = await axios.get('http://localhost:4444/register');
+export const registerUser = createAsyncThunk('/auth/register', async (props: IDataRegister) => {
+	const { data } = await axios.post('http://localhost:4444/auth/register', props);
 	return data;
 })
-export const login = createAsyncThunk('/auth/login', async () => {
-	const { data } = await axios.get('http://localhost:4444/login');
+export const loginUser = createAsyncThunk('/auth/login', async (props: IDataLogin) => {
+	const { data } = await axios.post('http://localhost:4444/auth/login', props);
 	return data;
 })
 
@@ -43,20 +49,34 @@ const auth = createSlice({
 	initialState,
 	reducers: {
 		setAuth: (state, action) => {
-			state.isAuth = !state.isAuth;
+			state.isAuth = action.payload;
 		}
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(register.pending, (state, action) => {
-				console.log('loading');
+			.addCase(registerUser.pending, (state, action) => {
+				state.status = Status.PENDING;
+				state.data = nullValue;
 			})
-			.addCase(register.fulfilled, (state, action) => {
+			.addCase(registerUser.fulfilled, (state, action) => {
+				state.status = Status.FULFILLED;
 				state.data = action.payload;
-				console.log('fulfilled');
 			})
-			.addCase(register.rejected, (state, action) => {
-				console.log('rejected');
+			.addCase(registerUser.rejected, (state, action) => {
+				state.status = Status.REJECTED;
+				state.data = nullValue;
+			})
+
+
+			.addCase(loginUser.pending, (state, action) => {
+				state.data = nullValue;
+			})
+			.addCase(loginUser.fulfilled, (state, action) => {
+				state.status = Status.FULFILLED;
+				state.data = action.payload;
+			})
+			.addCase(loginUser.rejected, (state, action) => {
+				state.status = Status.REJECTED;
 			})
 	}
 });

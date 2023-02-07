@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
 import { useDebounce } from '../hooks/useDebounce';
 import { setModalOpen } from '../store/reducers/authModalSlice';
+import { setAuth } from '../store/reducers/authSlice';
 import { setSearchOpen, setSearchValue } from '../store/reducers/searchSlice';
 import Search from './Search';
 
@@ -42,6 +43,7 @@ const Header: React.FC = () => {
 		setBurgerOpen(!BurgerOpen);
 	}
 
+	const isAuth = useTypedSelector(state => state.auth.isAuth)
 
 	return (
 		<header className='header'>
@@ -88,9 +90,7 @@ const Header: React.FC = () => {
 				</button>
 			</div >
 			<div className="header-rightside">
-				<button className='button auth-button'
-					onClick={toggleModal}
-				>Log in</button>
+				{!isAuth ? <button className='button auth-button' onClick={toggleModal}>Log in</button> : <button className='button auth-button' onClick={() => dispatch(setAuth(false))}>Sign out</button>}
 			</div>
 		</header >
 	)

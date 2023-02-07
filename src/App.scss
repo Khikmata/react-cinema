@@ -158,10 +158,6 @@ padding: 0;
       cursor: pointer;
       list-style-type: none;
     }
-    li {
-      &:hover {
-        }
-      }
     }
   }
   &-rightside {
@@ -689,10 +685,18 @@ margin-bottom: 100px;
 &__container{
   position: relative;
   overflow: hidden;
-  width: 90%;
-  padding-top: 50.25%;
-    @media(max-width: 700px) {
-          padding-top: 60.25%;
+  padding-top: 56.25%;
+    @media(max-width: 600px) {
+          padding-top: 68.25%;
+      }
+    @media(max-width: 500px) {
+          padding-top: 74.25%;
+      }
+    @media(max-width: 400px) {
+          padding-top: 78.25%;
+      }
+    @media(max-width: 350px) {
+          padding-top: 92.25%;
       }
 }
 
@@ -766,9 +770,7 @@ iframe{
   padding: 100px 40px;
   &__results{
     padding: 100px 20px 40px;
-    h2{
 
-    }
   }
 }
 

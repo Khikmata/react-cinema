@@ -37,6 +37,7 @@ const HomePage: React.FC = () => {
 				} else {
 					response = await axios.get(`https://api.consumet.org/anime/gogoanime/${searchValue}?page=${currentPage}`);
 				}
+
 				dispatch(setItem(response.data.results))
 				setIsLoading(false);
 			} catch (error) {

@@ -1,11 +1,12 @@
-import React, { Dispatch, SetStateAction, useRef, useState } from 'react'
+import React, { Dispatch, useEffect, useRef, useState } from 'react'
 import gitIcon from '../assets/images/gitIcon.svg'
 import vkIcon from '../assets/images/vkIcon.svg'
 import googleIcon from '../assets/images/googleIcon.svg'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
-import auth, { login, register } from '../store/reducers/authSlice';
+import auth, { IDataLogin, IDataRegister, loginUser, registerUser, setAuth } from '../store/reducers/authSlice';
 import { stat } from 'fs';
 import { setModalOpen } from '../store/reducers/authModalSlice';
+import { useForm } from 'react-hook-form';
 
 
 
@@ -25,25 +26,39 @@ const Modal: React.FC = () => {
 
 	const { isAuth } = useTypedSelector(state => state.auth)
 
+	const status = useTypedSelector(state => state.auth.status);
 	const open = useTypedSelector(state => state.modal.isModalOpen);
 	const dispatch = useAppDispatch();
 
-	const handleKeypress = (e: any) => {
-		//it triggers by pressing the enter key
-		if (e.keyCode === 13) {
-			Auth();
-		}
-	};
 
+	const { register, handleSubmit, setError, formState: { errors, isValid } } = useForm({
+		defaultValues: {
+			email: '',
+			userName: '',
+			password: '',
+		},
+		mode: 'onChange',
+	})
+
+	console.log(status)
+	const onSubmitRegister = (data: IDataRegister) => {
+		console.log(data)
+		dispatch(registerUser(data));
+	}
+	const onSubmitLogin = (data: IDataLogin) => {
+		console.log(data)
+		dispatch(loginUser(data));
+	}
 	const toggleClose = () => {
 		dispatch(setModalOpen(false));
 		(document.body.classList.remove("activeModal"));
 	}
 
-	const Auth = () => {
-		isSignUp ? dispatch(register({ email, password, userName })) : dispatch(login());
-		console.log(`email: ${email}, userName: ${userName}, password: ${password}`)
-	}
+	useEffect(() => {
+		if (status === 'fulfilled') {
+			dispatch(setAuth(true))
+		}
+	}, [status])
 
 	return (
 		<div>
@@ -53,26 +68,42 @@ const Modal: React.FC = () => {
 						<div className="modal-content__close">
 							<button onClick={toggleClose} className='modal-content__close button button-close'>X</button>
 						</div>
-						{(isSignUp && <div className='modal-content__input'>
-							<p>Email</p>
-							<input onKeyDown={(e) => handleKeypress(e)} ref={emailRef} value={email} onChange={e => setEmail(e.target.value)} className='input__box' ></input>
-						</div>
+						{(isSignUp
+							?
+							<form onSubmit={handleSubmit(onSubmitRegister)}>
+								<div className='modal-content__input'>
+									<p>Email</p>
+									<input type='text' className='input__box' placeholder='someone@gmail.com' {...register("email", { required: 'Укажите почту', pattern: /^\S+@\S+$/i })} />
+								</div>
+
+								<div className='modal-content__input'>
+									<p>Username</p>
+									<input type='text' className='input__box' placeholder='someone' {...register("userName", { required: 'Укажите ник' })} ></input>
+								</div>
+								<div className='modal-content__input'>
+									<p>Password</p>
+									<input type='password' className='input__box' placeholder='password123' {...register("password", { required: 'Укажите пароль' })} />
+								</div>
+								<button type='submit' className='modal-content__button button'>  {isSignUp ? `SIGN UP` : `LOG IN`} </button>
+							</form>
+							:
+							<form onSubmit={handleSubmit(onSubmitLogin)} >
+								<div className='modal-content__input'>
+									<p>Username</p>
+									<input type='text' className='input__box' placeholder='someone' {...register("userName", { required: 'Укажите ник' })} ></input>
+								</div>
+								<div className='modal-content__input'>
+									<p>Password</p>
+									<input type='password' className='input__box' placeholder='password123' {...register("password", { required: 'Укажите пароль' })} />
+								</div>
+								<div className='modal-content__secondaryInputs'>
+									<input className='check-box__input' type={'checkbox'} />
+									<p> Remember me </p>
+									<span> Forgot your password? </span>
+								</div>
+								<button type='submit' className='modal-content__button button'>  {isSignUp ? `SIGN UP` : `LOG IN`} </button>
+							</form>
 						)}
-						<div className='modal-content__input'>
-							<p>Username</p>
-							<input onKeyDown={(e) => handleKeypress(e)} ref={userRef} value={userName} onChange={e => setUsername(e.target.value)} className='input__box' ></input>
-						</div>
-						<div className='modal-content__input'>
-							<p>Password</p>
-							<input onKeyDown={(e) => handleKeypress(e)} ref={passRef} value={password} onChange={e => setPassword(e.target.value)} type={'password'} className='input__box'></input>
-						</div>
-						{(!isSignUp && <div className='modal-content__secondaryInputs'>
-							<input className='check-box__input' type={'checkbox'} />
-							<p> Remember me </p>
-							<span> Forgot your password? </span>
-						</div>
-						)}
-						<button type='submit' onClick={Auth} className='modal-content__button button'>  {isSignUp ? `SIGN UP` : `LOG IN`} </button>
 						<span className='modal-content__orSignIn'>or sign in with</span>
 						<div className='modal-content__signIcons'>
 							<img src={gitIcon} style={{ marginBottom: '100px' }} height={30} width={30}></img>
@@ -82,7 +113,7 @@ const Modal: React.FC = () => {
 					</div>
 					<button onClick={() => setIsSignUp(!isSignUp)} className={`modal-content__orSignIn blue button`}> {isSignUp ? `Log In?` : `Sign Up?`}</button>
 				</div>
-			</div>
+			</div >
 		</div >
 	)
 }
