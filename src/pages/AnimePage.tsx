@@ -207,7 +207,7 @@ const AnimePage: React.FC = () => {
 					<div className="comment-section">
 						<h2 className='comment-title'>Comments</h2>
 						{
-							(items && items.map((comment) =>
+							(items ? items.map((comment) =>
 								<div className='comment-section__comment'>
 									{comment && <img className='comment-avatar' src={`${comment.user.avatarUrl}`} />}
 									<div className='comment-text'>
@@ -217,7 +217,8 @@ const AnimePage: React.FC = () => {
 									<p className='comment-likes'>{comment.likesCount}</p>
 									<p>+</p>
 								</div>
-							))}
+							) : <h1> nvm </h1>)
+						}
 					</div>
 				</div >
 			</div >
