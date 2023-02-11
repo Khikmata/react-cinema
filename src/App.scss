@@ -914,6 +914,7 @@ iframe{
   }
 }
 .back-slider{
+  z-index: 10;
   position: fixed;
   width: 1280px;
   transition: all 0.3s ease-in-out;
