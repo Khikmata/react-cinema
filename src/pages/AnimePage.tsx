@@ -207,17 +207,17 @@ const AnimePage: React.FC = () => {
 					<div className="comment-section">
 						<h2 className='comment-title'>Comments</h2>
 						{
-							(items ? items.map((comment) =>
-								<div className='comment-section__comment'>
-									{comment && <img className='comment-avatar' src={`${comment.user.avatarUrl}`} />}
-									<div className='comment-text'>
-										<h2>{comment.user.userName}</h2>
-										<p>{comment.text}</p>
-									</div>
-									<p className='comment-likes'>{comment.likesCount}</p>
-									<p>+</p>
-								</div>
-							) : <h1> nvm </h1>)
+							//(items ? items.map((comment) =>
+							//	<div className='comment-section__comment'>
+							//		{comment && <img className='comment-avatar' src={`${comment.user.avatarUrl}`} />}
+							//		<div className='comment-text'>
+							//			<h2>{comment.user.userName}</h2>
+							//			<p>{comment.text}</p>
+							//		</div>
+							//		<p className='comment-likes'>{comment.likesCount}</p>
+							//		<p>+</p>
+							//	</div>
+							//) : <h1> nvm </h1>)
 						}
 					</div>
 				</div >
