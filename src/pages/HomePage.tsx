@@ -33,12 +33,16 @@ const HomePage: React.FC = () => {
 			try {
 				let response;
 				if (!searchValue) {
-					response = await axios.get(`https://api.consumet.org/anime/gogoanime/top-airing`, { params: { page: currentPage } })
+					response = await axios.get(`https://api.consumet.org/anime/gogoanime/top-airing`, { params: { page: currentPage } });
+					response = response.data.results;
 				} else {
 					response = await axios.get(`https://api.consumet.org/anime/gogoanime/${searchValue}?page=${currentPage}`);
+					console.log(response.data.results)
+					response = response.data.results.filter((item: any) => !item.id.includes("dub"));
 				}
 
-				dispatch(setItem(response.data.results))
+				dispatch(setItem(response))
+				console.log(items)
 				setIsLoading(false);
 			} catch (error) {
 				setIsLoading(false);

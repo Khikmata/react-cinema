@@ -40,6 +40,7 @@ export const registerUser = createAsyncThunk('/auth/register', async (props: IDa
 	return data;
 })
 export const loginUser = createAsyncThunk('/auth/login', async (props: IDataLogin) => {
+
 	const { data } = await axios.post('http://localhost:4444/auth/login', props);
 	return data;
 })
@@ -50,11 +51,15 @@ const auth = createSlice({
 	reducers: {
 		setAuth: (state, action) => {
 			state.isAuth = action.payload;
+			if (state.isAuth === false) {
+				state.data = nullValue;
+				state.status = Status.PENDING;
+			}
 		}
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(registerUser.pending, (state, action) => {
+			.addCase(registerUser.pending, (state,) => {
 				state.status = Status.PENDING;
 				state.data = nullValue;
 			})
@@ -62,20 +67,21 @@ const auth = createSlice({
 				state.status = Status.FULFILLED;
 				state.data = action.payload;
 			})
-			.addCase(registerUser.rejected, (state, action) => {
+			.addCase(registerUser.rejected, (state,) => {
 				state.status = Status.REJECTED;
 				state.data = nullValue;
 			})
 
 
-			.addCase(loginUser.pending, (state, action) => {
+			.addCase(loginUser.pending, (state,) => {
 				state.data = nullValue;
 			})
 			.addCase(loginUser.fulfilled, (state, action) => {
 				state.status = Status.FULFILLED;
 				state.data = action.payload;
 			})
-			.addCase(loginUser.rejected, (state, action) => {
+			.addCase(loginUser.rejected, (state,) => {
+				state.data = nullValue;
 				state.status = Status.REJECTED;
 			})
 	}

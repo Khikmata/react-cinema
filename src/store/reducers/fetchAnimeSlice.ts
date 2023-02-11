@@ -25,6 +25,7 @@ const initialState: IFetchAnimeInitState = {
 
 export const fetchAnimes = createAsyncThunk('anime/fetchAnimes', async () => {
 	const { data } = await axios.get<IAnimeDetails>(`https://api.consumet.org/anime/gogoanime/top-airing/`)
+	return data;
 })
 export const fetchAnimeById = createAsyncThunk('anime/fetchAnimeById', async (id: string) => {
 	const { data } = await axios.get<IAnimeDetails>(`https://api.consumet.org/anime/gogoanime/info/${id}`);

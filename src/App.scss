@@ -6,8 +6,9 @@
 }
 
 $background-color: #1e1e22;
-$font-primary: #45a7d4;
-
+$blue: #45a7d4;
+$green: #3e9f17;
+$halfOpacity: rgba(216, 216, 216, 0.4);
 li{
   list-style-type: none;
 }
@@ -208,7 +209,7 @@ main{
   padding: 130px 0 40px;
 }
 span{
-  color:rgba(216, 216, 216, 0.4);
+  color:$halfOpacity;
 }
 
 .main-display {
@@ -288,7 +289,7 @@ span{
   &__underTitle{
     display: flex;
     justify-content: start;
-    border-top: 1px solid rgba(217, 217, 217, 0.1);
+    border-top: 1px solid rgba(216, 216, 216, 0.4);
     h3{
       font-size: 10px;
       color: #d8d8d8;
@@ -332,7 +333,7 @@ span{
     background-color: #83a4ff;
   }
   &.button-close{
-    border: 1px solid rgba(151, 151, 151, 0.3);
+    border: 1px solid $halfOpacity;
     &:hover{
       background-color: #979797;
       color: white;
@@ -352,7 +353,7 @@ span{
     }
   }
   &.genre_button{
-    border: 1px solid rgba(216, 216, 216, 0.4);
+    border: 1px solid $halfOpacity;
     padding: 2px 4px;
     border-radius: 4px;
     margin: 0 3px;
@@ -388,22 +389,22 @@ span{
      }
     }
     &:active {
-        border: 1px solid rgba(151, 151, 151, 0.3);
+        border: 1px solid $halfOpacity;
         background-color: transparent;
         color: rgba(151, 151, 151, 0.3);
       }
   }
   &.disabled {
-    border: 1px solid rgba(151, 151, 151, 0.3);
+    border: 1px solid $halfOpacity;
     color: rgba(151, 151, 151, 0.3);
       &:hover{
-        border: 1px solid rgba(151, 151, 151, 0.3);
-        color: rgba(151, 151, 151, 0.3);
+        border: 1px solid $halfOpacity;
+        color: $halfOpacity;
       }
       &:active{
-        border: 1px solid rgba(151, 151, 151, 0.3);
+        border: 1px solid $halfOpacity;
         background-color:transparent;
-        color: rgba(151, 151, 151, 0.3);
+        color: $halfOpacity;
       }
   }
 }
@@ -566,11 +567,63 @@ height: 32px;
       flex-direction: column;
       align-items: center;
       flex: 25%;
+      &-state{
+        margin-top: 20px;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        position: relative;
+        .green {
+            background-color: $green;
+            border: 0;
+          }
+        &__block{
+          display: flex;
+          background-color: $blue;
+          width: 100%;
+          height: 40px;
+          border-radius: 4px;
+          justify-content: center;
+          align-items: center;
+          font-size: 18px;
+          border: 0;
+        }
+        &-usermodal{
+          z-index: 1000;
+          top: 45px;
+          position: absolute;
+          width: 100%;
+          height: 160px;
+          padding-bottom: 10px;
+          background-color: #272a33;
+        &-list{
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+
+            &__item{
+              color: #d8d8d8;
+              display: flex;
+              background-color: #343845;
+              height: 28%;
+              width: 90%;
+              justify-content: center;
+              align-items: center;
+              border-radius: 4px;
+            }
+          }
+        }
+      }
+
       &__image{
         max-width: 280px;
         max-height: 400px;
-        min-width: 160px;
-        min-height: 170px;
+        position: relative;
+
         img{
           width: 280px;
           height: 400px;
@@ -632,6 +685,7 @@ height: 32px;
           .description {
             padding: 16px 0px;
 
+
             @media(max-width:800px){
               
             display: none;
@@ -648,8 +702,19 @@ height: 32px;
   padding: 0px 30px 70px ;
   display: none;
   margin-top: -40px;
+  height: 100px;
+  overflow: hidden;
+  border-bottom: 1px solid $halfOpacity;
+
+  &.active {
+    overflow: visible;
+    height: 100%;
+    border-bottom: 0;
+  }
   h2{
     font-size: 14px;
+
+
   }
   @media(max-width:800px) {
     display: block;
@@ -668,7 +733,33 @@ height: 32px;
   text-align: center;
   max-width: 800px;
   max-height: 600px;
-
+  position: relative;
+  h2{
+    margin-left: 30px;
+    text-align: left;
+  }
+  &__watchsub {
+      right: 150px;
+  
+    }
+  
+    &__watchdub {
+      right: 0;
+    }
+  
+    a {
+      display: flex;
+      text-decoration: none;
+      z-index: 10;
+      position: absolute;
+  
+      border-radius: 4px;
+      width: 120px;
+      height: 40px;
+      background-color: #5985ff;
+      justify-content: center;
+      align-items: center;
+    }
 margin-bottom: 100px;
 &-anime{
   margin-top: 30px;

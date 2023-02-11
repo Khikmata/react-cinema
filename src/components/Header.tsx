@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
-import { useDebounce } from '../hooks/useDebounce';
 import { setModalOpen } from '../store/reducers/authModalSlice';
 import { setAuth } from '../store/reducers/authSlice';
 import { setSearchOpen, setSearchValue } from '../store/reducers/searchSlice';

@@ -1,11 +1,13 @@
 import axios from 'axios'
-import React, { useEffect, useState, memo } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, { useEffect, useState, memo, useRef } from 'react'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Modal from '../components/Modal'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux'
 import { IAnimeData, IAnimeDetails, IAnimePlayer, ISources } from '../models/IAnime'
 import { fetchAnimePlayer, setPlayerSources } from '../store/reducers/animePlayerSlice'
+import { setModalOpen } from '../store/reducers/authModalSlice'
+import authSlice from '../store/reducers/authSlice'
 import { fetchCommentsData, getAllComments } from '../store/reducers/CommentSlice'
 import fetchAnimeSlice, { fetchAnimeById, setDetails } from '../store/reducers/fetchAnimeSlice'
 import HomePage from './HomePage'
@@ -26,15 +28,15 @@ const AnimePage: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { id } = useParams();
 
-	//const fetchComments = () => {
-	//	try {
-	//		setIsLoading(true);
-	//		dispatch(fetchCommentsData());
-	//	} catch (error) {
-	//		console.log('error occured while trying to fetch comments', error)
-	//		setIsLoading(false);
-	//	}
-	//}
+	const fetchComments = () => {
+		try {
+			setIsLoading(true);
+			dispatch(fetchCommentsData());
+		} catch (error) {
+			console.log('error occured while trying to fetch comments', error)
+			setIsLoading(false);
+		}
+	}
 
 	const fetchByID = () => {
 		try {
@@ -60,18 +62,19 @@ const AnimePage: React.FC = () => {
 		}
 	}
 
+	const modalOpen = useTypedSelector(state => state.modal.isModalOpen);
 
 	useEffect(() => {
-
 		window.addEventListener('scroll', handleScroll, { passive: true });
-		//fetchComments();
+		fetchComments();
 		fetchByID();
 
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
 		};
-	}, [])
+	}, [details.releaseDate])
 	useEffect(() => {
+
 		if (details.episodes.length !== 0) {
 			fetchPlayer();
 			console.log(sources)
@@ -92,12 +95,28 @@ const AnimePage: React.FC = () => {
 		setScrollPosition(position);
 	};
 
+	const [listModalOpen, setListModalOpen] = useState(false);
+
+	const userWatchRef = useRef(null);
+	const [userWatchStateId, setUserWatchStateId] = useState(0)
 
 
+	const handleModal = () => {
+		if (listModalOpen === true) {
+			setListModalOpen(false);
+		}
+	}
+
+	const [openDescription, setOpenDescription] = useState(false);
+
+	const ifDub = details.id.includes('-dub') ? details.id.replace('-dub', '') : details.id;
+	const ifSub = details.id.includes('-dub') ? details.id : details.id + '-dub';
 
 
 	return (
-		<div className='wrapper'>
+		<div className={`wrapper ${modalOpen ? 'activeModal' : ''}`}>
+			{modalOpen && <Modal />
+			}
 			<div className='container'>
 				<Header />
 				<div className={`back-slider${scrollPosition > 400 ? ' slide' : ''}`}>
@@ -107,13 +126,27 @@ const AnimePage: React.FC = () => {
 						</h2>
 					</Link>
 				</div>
-				<div className="anime-page">
+				<div className="anime-page " onClick={() => handleModal}>
 
 					<div className="content">
 
 						<div className="content-leftside">
 							<div className="content-leftside__image">
 								<img src={details.image}></img>
+
+							</div>
+							<div className={`content-leftside-state`}>
+								<button onClick={() => setListModalOpen(!listModalOpen)} type='button' className={`content-leftside-state__block ${userWatchStateId === 1 ? 'green' : ''}`}>{userWatchStateId === 1 ? 'Просмотрено' : 'Добавить в список'} </button>
+								{
+									listModalOpen &&
+									<div className={'content-leftside-state-usermodal'} >
+										<ul ref={userWatchRef} onClick={() => setListModalOpen(!listModalOpen)} className={'content-leftside-state-usermodal-list'}>
+											<li onClick={() => setUserWatchStateId(1)} className="content-leftside-state-usermodal-list__item" > Просмотрено</li>
+											<li onClick={() => setUserWatchStateId(2)} className="content-leftside-state-usermodal-list__item" > Смотрю</li>
+											<li onClick={() => setUserWatchStateId(3)} className="content-leftside-state-usermodal-list__item" > Запланировано</li>
+										</ul>
+									</div>
+								}
 							</div>
 						</div>
 						<div className="content-rightside">
@@ -124,18 +157,26 @@ const AnimePage: React.FC = () => {
 								<h2><span>Category:</span> {details.type}</h2>
 								<h2><span>Status:</span> {details.status} </h2>
 								<h2><span>Episodes:</span> {details.totalEpisodes} </h2>
-								<h2><span>VoiceOver:</span> {details.subOrDub} </h2>
+								<h2><span>VoiceOver:</span> {details.subOrDub?.toUpperCase()} </h2>
 								<h2><span>Genres:</span> {details.genres?.map((word, id) => <button key={id} className='button genre_button'> {word}</button>)} </h2>
 								<article>
-									<h2 className='description'><span>Description:</span> <br />{details.description} </h2>
+									<h2 className={'description'}><span>Description:</span> <br />{details.description} </h2>
 								</article>
 							</div>
 						</div>
 					</div>
 					<article>
-						<div className='description-mobile'><span>Description:</span> <br /><h2>{details.description} </h2></div>
+						<div onClick={() => setOpenDescription(!openDescription)} className={`description-mobile${openDescription ? ' active' : ''}`}><span>Description:</span> <br /><h2>{details.description} </h2></div>
 					</article>
 					<div className='watch'>
+						{
+							(sources.length !== 0 && <>
+								<Link reloadDocument className='watch__watchsub' to={`/anime/${ifDub}`} > Watch Sub </Link>
+								<Link reloadDocument className='watch__watchdub' to={`/anime/${ifSub}`} > Watch Dub </Link>
+							</>
+							)
+						}
+
 						<h2> Watch online </h2>
 						<div className='watch-anime'>
 							{

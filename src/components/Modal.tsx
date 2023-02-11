@@ -1,10 +1,9 @@
-import React, { Dispatch, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import gitIcon from '../assets/images/gitIcon.svg'
 import vkIcon from '../assets/images/vkIcon.svg'
 import googleIcon from '../assets/images/googleIcon.svg'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
-import auth, { IDataLogin, IDataRegister, loginUser, registerUser, setAuth } from '../store/reducers/authSlice';
-import { stat } from 'fs';
+import { IDataLogin, IDataRegister, loginUser, registerUser, setAuth } from '../store/reducers/authSlice';
 import { setModalOpen } from '../store/reducers/authModalSlice';
 import { useForm } from 'react-hook-form';
 
@@ -13,25 +12,16 @@ import { useForm } from 'react-hook-form';
 const Modal: React.FC = () => {
 
 
-	const [email, setEmail] = useState('')
-	const [userName, setUsername] = useState('')
-	const [password, setPassword] = useState('')
-
-	const emailRef = useRef(null);
-	const userRef = useRef(null);
-	const passRef = useRef(null);
-
 
 	const [isSignUp, setIsSignUp] = useState(false)
 
-	const { isAuth } = useTypedSelector(state => state.auth)
 
 	const status = useTypedSelector(state => state.auth.status);
 	const open = useTypedSelector(state => state.modal.isModalOpen);
 	const dispatch = useAppDispatch();
 
 
-	const { register, handleSubmit, setError, formState: { errors, isValid } } = useForm({
+	const { register, handleSubmit } = useForm({
 		defaultValues: {
 			email: '',
 			userName: '',
@@ -54,14 +44,17 @@ const Modal: React.FC = () => {
 		(document.body.classList.remove("activeModal"));
 	}
 
+
 	useEffect(() => {
 		if (status === 'fulfilled') {
 			dispatch(setAuth(true))
+			dispatch(setModalOpen(false))
 		}
-	}, [status])
+	}, [dispatch, status])
 
 	return (
 		<div>
+
 			<div className={`modal ${open ? 'active' : ''}`} onMouseDown={toggleClose}>
 				<div className='modal-box' onMouseDown={(e) => e.stopPropagation()}>
 					<div className="modal-content" >
@@ -73,16 +66,16 @@ const Modal: React.FC = () => {
 							<form onSubmit={handleSubmit(onSubmitRegister)}>
 								<div className='modal-content__input'>
 									<p>Email</p>
-									<input type='text' className='input__box' placeholder='someone@gmail.com' {...register("email", { required: 'Укажите почту', pattern: /^\S+@\S+$/i })} />
+									<input type='text' className='input__box' placeholder='test@gmail.com' {...register("email", { required: 'Укажите почту', pattern: /^\S+@\S+$/i })} />
 								</div>
 
 								<div className='modal-content__input'>
 									<p>Username</p>
-									<input type='text' className='input__box' placeholder='someone' {...register("userName", { required: 'Укажите ник' })} ></input>
+									<input type='text' className='input__box' placeholder='placeholder' {...register("userName", { required: 'Укажите ник' })} ></input>
 								</div>
 								<div className='modal-content__input'>
 									<p>Password</p>
-									<input type='password' className='input__box' placeholder='password123' {...register("password", { required: 'Укажите пароль' })} />
+									<input type='password' className='input__box' placeholder='password' {...register("password", { required: 'Укажите пароль' })} />
 								</div>
 								<button type='submit' className='modal-content__button button'>  {isSignUp ? `SIGN UP` : `LOG IN`} </button>
 							</form>
@@ -90,11 +83,11 @@ const Modal: React.FC = () => {
 							<form onSubmit={handleSubmit(onSubmitLogin)} >
 								<div className='modal-content__input'>
 									<p>Username</p>
-									<input type='text' className='input__box' placeholder='someone' {...register("userName", { required: 'Укажите ник' })} ></input>
+									<input type='text' className='input__box' placeholder='placeholder' {...register("userName", { required: 'Укажите ник' })} ></input>
 								</div>
 								<div className='modal-content__input'>
 									<p>Password</p>
-									<input type='password' className='input__box' placeholder='password123' {...register("password", { required: 'Укажите пароль' })} />
+									<input type='password' className='input__box' placeholder='password' {...register("password", { required: 'Укажите пароль' })} />
 								</div>
 								<div className='modal-content__secondaryInputs'>
 									<input className='check-box__input' type={'checkbox'} />
