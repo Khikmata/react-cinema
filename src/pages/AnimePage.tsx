@@ -64,7 +64,7 @@ const AnimePage: React.FC = () => {
 	useEffect(() => {
 
 		window.addEventListener('scroll', handleScroll, { passive: true });
-		fetchComments();
+		//fetchComments();
 		fetchByID();
 
 		return () => {
