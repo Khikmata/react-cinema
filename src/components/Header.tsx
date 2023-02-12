@@ -5,7 +5,7 @@ import { setModalOpen } from '../store/reducers/authModalSlice';
 import { setAuth } from '../store/reducers/authSlice';
 import { setSearchOpen, setSearchValue } from '../store/reducers/searchSlice';
 import Search from './Search';
-
+import logo from '../assets/images/logo.png'
 
 
 
@@ -56,7 +56,7 @@ const Header: React.FC = () => {
 			}
 			<div className="header-leftside">
 				<div className='header-leftside__content'>
-					<h1><Link onClick={toggleSearch} className='logo' to={'/'}>React Anime</Link></h1>
+					<h1><Link onClick={toggleSearch} className='logo' to={'/'}><img width={160} src={logo}></img></Link></h1>
 				</div>
 			</div>
 			<div className="header-center">

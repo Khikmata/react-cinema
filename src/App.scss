@@ -9,11 +9,12 @@ $background-color: #1e1e22;
 $blue: #45a7d4;
 $green: #3e9f17;
 $halfOpacity: rgba(216, 216, 216, 0.4);
+
+
+
 li{
   list-style-type: none;
 }
-
-
 
 .activeModal {
   overflow: hidden;
@@ -68,6 +69,9 @@ font-size: 16px;
         display: flex;
         height: 100%;
         align-items: center;
+        img {
+            margin-top: 10px;
+          }
           .logo {
           text-decoration: none;
           transition: all 0.2s ease-in-out;
@@ -142,12 +146,19 @@ padding: 0;
 
     }
     li {
-
+transition: all 0.2 ease-in-out;
+            &:hover {
+              a{
+                color: #45a7d4;
+              }
+                scale: 103%;
+              }
       a{
       text-decoration: none;
       color: white;
       text-align: center;
       font-weight: bold;
+
       }
       margin: 0 30px;
       @media(max-width:768px){
@@ -249,37 +260,57 @@ span{
     }
   }
 }
-.carts{
+.cards{
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  &.searchpage{
+    flex-direction: column;
+  }
 }
 
 .anime-card{
-  margin: 0px 20px;
+  &.searchpage{
+    width: 100%;
+    height: 140px;
+    padding: 0px 40px 10px 0px;
+    display: flex;
+  }
+  margin: 0px 10px;
   width: 200px;
-  height: 400px;
+  height: 320px;
   cursor: pointer;
   overflow: hidden;
           @media(max-width:520px) {
-              width: 100px;
-              height: 150px;
+              width: 180px;
+              height: 350px;
+            }
+          @media(max-width:400px) {
+              width: 120px;
+              height: 250px;
             }
   &__img{
     display: block;
     width: 100%;
-    height: 80%;
-
-    img {
-        width: 100%;
-        height: 100%;
-        border-radius: 12px;
-        object-fit: cover;
-      }
+    height: 85%;
+        &.searchpage{
+          width: 100px;
+          height: 100%;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            object-fit: cover;
+          }
   }
 
   &__title{
     margin-top:5px;
+    height: 20px;
+    &.searchpage {
+        margin-left: 20px;
+      }
     h3{
       font-size: 14px;
       font-weight: 700;
@@ -297,7 +328,7 @@ span{
     }
 }
 .main-hot__title{
-  padding: 40px 60px;
+  margin: 20px 100px;
   font-size: 24px;
     color: #45a7d4;
     @media(max-width: 1025px){
@@ -590,13 +621,23 @@ height: 32px;
           border: 0;
         }
         &-usermodal{
+          display: none;
+          top: -100px;
+          transition: all 0.3s ease-in-out;
           z-index: 1000;
-          top: 45px;
           position: absolute;
-          width: 100%;
-          height: 160px;
           padding-bottom: 10px;
-          background-color: #272a33;
+          &.active{
+            display: flex;
+            top: 45px;
+            width: 100%;
+            height: 160px;
+            transition: all 0.3s ease-in-out;
+            background-color: #272a33;
+          }
+
+
+
         &-list{
             height: 100%;
             width: 100%;
@@ -921,4 +962,7 @@ iframe{
   &.slide{
   transform: translateY(-100px);
   }
+}
+.gray{
+  color: #d8d8d8;
 }

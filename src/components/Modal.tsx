@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import gitIcon from '../assets/images/gitIcon.svg'
-import vkIcon from '../assets/images/vkIcon.svg'
-import googleIcon from '../assets/images/googleIcon.svg'
+import gitIcon from '../assets/icons/gitIcon.svg'
+import vkIcon from '../assets/icons/vkIcon.svg'
+import googleIcon from '../assets/icons/googleIcon.svg'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
 import { IDataLogin, IDataRegister, loginUser, registerUser, setAuth } from '../store/reducers/authSlice';
 import { setModalOpen } from '../store/reducers/authModalSlice';

@@ -1,16 +1,12 @@
-import axios from 'axios'
-import React, { useEffect, useState, memo, useRef } from 'react'
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import React, { useEffect, useState, useRef } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Modal from '../components/Modal'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux'
-import { IAnimeData, IAnimeDetails, IAnimePlayer, ISources } from '../models/IAnime'
-import { fetchAnimePlayer, setPlayerSources } from '../store/reducers/animePlayerSlice'
-import { setModalOpen } from '../store/reducers/authModalSlice'
-import authSlice from '../store/reducers/authSlice'
+import { fetchAnimePlayer } from '../store/reducers/animePlayerSlice'
 import { fetchCommentsData, getAllComments } from '../store/reducers/CommentSlice'
-import fetchAnimeSlice, { fetchAnimeById, setDetails } from '../store/reducers/fetchAnimeSlice'
-import HomePage from './HomePage'
+import { fetchAnimeById, setDetails } from '../store/reducers/fetchAnimeSlice'
+
 
 
 const AnimePage: React.FC = () => {
@@ -20,13 +16,28 @@ const AnimePage: React.FC = () => {
 	const { details } = useTypedSelector(state => state.fetchAnimeSlice)
 	const { sources } = useTypedSelector(state => state.animePlayer)
 	const { items } = useTypedSelector(state => state.comment.comments)
+	const { isModalOpen } = useTypedSelector(state => state.modal);
+
+	const dispatch = useAppDispatch();
+
+	const { id } = useParams();
 
 	const [isLoading, setIsLoading] = useState(true)
+	const [listModalOpen, setListModalOpen] = useState(false);
+	const [openDescription, setOpenDescription] = useState(false);
+
 	const [episodes, setEpisodes] = useState<string[]>([])
 	const [currentEpisode, setCurrentEpisode] = useState(1);
 
-	const dispatch = useAppDispatch();
-	const { id } = useParams();
+	const [scrollPosition, setScrollPosition] = useState(0);
+	const [userWatchStateId, setUserWatchStateId] = useState(0)
+
+	const userWatchRef = useRef(null);
+
+	const ifDub = details.id.includes('-dub') ? details.id.replace('-dub', '') : details.id;
+	const ifSub = details.id.includes('-dub') ? details.id : details.id + '-dub';
+
+
 
 	const fetchComments = () => {
 		try {
@@ -37,7 +48,6 @@ const AnimePage: React.FC = () => {
 			setIsLoading(false);
 		}
 	}
-
 	const fetchByID = () => {
 		try {
 			dispatch(fetchAnimeById(id ? id : ''));
@@ -49,7 +59,6 @@ const AnimePage: React.FC = () => {
 			setIsLoading(false);
 		}
 	}
-
 	const fetchPlayer = () => {
 		try {
 			if (id && currentEpisode) {
@@ -62,25 +71,24 @@ const AnimePage: React.FC = () => {
 		}
 	}
 
-	const modalOpen = useTypedSelector(state => state.modal.isModalOpen);
 
+
+	//fetch on mount
 	useEffect(() => {
 		window.addEventListener('scroll', handleScroll, { passive: true });
 		fetchComments();
 		fetchByID();
-
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
 		};
-	}, [details.releaseDate])
-	useEffect(() => {
+	}, [])
 
+	useEffect(() => {
 		if (details.episodes.length !== 0) {
 			fetchPlayer();
 			console.log(sources)
 		}
 	}, [items, details, currentEpisode])
-
 
 	useEffect(() => {
 		setEpisodes(details.episodes.map((item) => item.number.toString()));
@@ -88,18 +96,13 @@ const AnimePage: React.FC = () => {
 	}, [details])
 
 
-	const [scrollPosition, setScrollPosition] = useState(0);
+
+
 
 	const handleScroll = () => {
 		const position = window.pageYOffset;
 		setScrollPosition(position);
 	};
-
-	const [listModalOpen, setListModalOpen] = useState(false);
-
-	const userWatchRef = useRef(null);
-	const [userWatchStateId, setUserWatchStateId] = useState(0)
-
 
 	const handleModal = () => {
 		if (listModalOpen === true) {
@@ -107,15 +110,9 @@ const AnimePage: React.FC = () => {
 		}
 	}
 
-	const [openDescription, setOpenDescription] = useState(false);
-
-	const ifDub = details.id.includes('-dub') ? details.id.replace('-dub', '') : details.id;
-	const ifSub = details.id.includes('-dub') ? details.id : details.id + '-dub';
-
-
 	return (
-		<div className={`wrapper ${modalOpen ? 'activeModal' : ''}`}>
-			{modalOpen && <Modal />
+		<div className={`wrapper ${isModalOpen ? 'activeModal' : ''}`}>
+			{isModalOpen && <Modal />
 			}
 			<div className='container'>
 				<Header />
@@ -138,8 +135,7 @@ const AnimePage: React.FC = () => {
 							<div className={`content-leftside-state`}>
 								<button onClick={() => setListModalOpen(!listModalOpen)} type='button' className={`content-leftside-state__block ${userWatchStateId === 1 ? 'green' : ''}`}>{userWatchStateId === 1 ? 'Просмотрено' : 'Добавить в список'} </button>
 								{
-									listModalOpen &&
-									<div className={'content-leftside-state-usermodal'} >
+									<div className={`content-leftside-state-usermodal ${listModalOpen ? 'active' : ''}`} >
 										<ul ref={userWatchRef} onClick={() => setListModalOpen(!listModalOpen)} className={'content-leftside-state-usermodal-list'}>
 											<li onClick={() => setUserWatchStateId(1)} className="content-leftside-state-usermodal-list__item" > Просмотрено</li>
 											<li onClick={() => setUserWatchStateId(2)} className="content-leftside-state-usermodal-list__item" > Смотрю</li>

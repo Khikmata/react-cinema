@@ -16,22 +16,26 @@ import Skeleton from '../components/Skeleton';
 const HomePage: React.FC = () => {
 
 
-	const [isLoading, setIsLoading] = useState(true);
 	const { items } = useTypedSelector(state => state.fetchAnimeSlice)
-
-	const [currentPage, setCurrentPage] = useState(1);
-	const [hasNextPage, setHasNextPage] = useState(true);
-
-	const dispatch = useAppDispatch();
-
 	const modalOpen = useTypedSelector(state => state.modal.isModalOpen);
 	const searchValue = useTypedSelector(state => state.search.searchValue);
 
+	const dispatch = useAppDispatch();
+
+	const [currentPage, setCurrentPage] = useState(1);
+	const [isLoading, setIsLoading] = useState(true);
+	const [hasNextPage, setHasNextPage] = useState(true);
+
+
+
 	useEffect(() => {
-		setIsLoading(true)
+
+		setIsLoading(true);
+
 		const fetchItems = async () => {
 			try {
 				let response;
+
 				if (!searchValue) {
 					response = await axios.get(`https://api.consumet.org/anime/gogoanime/top-airing`, { params: { page: currentPage } });
 					response = response.data.results;
@@ -73,8 +77,8 @@ const HomePage: React.FC = () => {
 					<Header />
 					<main>
 						{/* <BackgroundSlider images={images} interval={interval} items={items} /> */}
-						<h2 className='main-hot__title'>{searchValue !== '' ? 'Search results' : 'Popular anime'}</h2>
-						<div className="carts">
+						<h2 className='main-hot__title'>{searchValue !== '' ? 'Search results' : 'Current season'}</h2>
+						<div className="cards">
 							{isLoading && [...new Array(10)].map((_, index) => <Skeleton key={index} />)}
 							{(items.length !== 0 && isLoading === false &&
 								items.map((item: IAnimeData, id: number) => (
@@ -96,6 +100,10 @@ const HomePage: React.FC = () => {
 						<div className="pagination">
 							<button disabled={(currentPage === 1 ? true : false)} className={`button pagination-button ${(currentPage === 1) ? 'disabled' : ''} `} onClick={decrementPage}> ⬅ </button>
 							<button className={'button pagination-button'} onClick={incrementPage}> ➡ </button>
+						</div>
+						<div className="news">
+							<h2 className='main-hot__title'>Anime news</h2>
+
 						</div>
 					</main>
 					<footer>

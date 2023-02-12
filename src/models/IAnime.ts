@@ -11,6 +11,7 @@ export interface IAnimeData {
     title: string;
     url: string;
     genres: string[];
+    releaseDate: string;
 }
 
 interface IEpisodes {
@@ -48,4 +49,11 @@ export interface IAnimePlayer {
     download: string;
     headers: IHeaders;
     sources: ISources[];
+}
+
+export interface IAnimeSearch {
+    id: string;
+    title: string;
+    image: string;
+    releaseDate: string;
 }
