@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import Header from '../components/Header'
+import Header from '../components/Navbar'
 import Skeleton from '../components/Skeleton';
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
 import { IAnimeData, IAnimeSearch } from '../models/IAnime';
@@ -30,17 +30,8 @@ const SearchPage = () => {
 
 		const fetchItems = async () => {
 			try {
-				let response;
-
-				if (!searchValue) {
-					response = await axios.get(`https://api.consumet.org/anime/gogoanime/top-airing`, { params: { page: currentPage } });
-					response = response.data.results;
-				} else {
-					response = await axios.get(`https://api.consumet.org/anime/gogoanime/${searchValue}?page=${currentPage}`);
-					console.log(response.data.results)
-					response = response.data.results.filter((item: IAnimeSearch) => !item.id.includes("dub"));
-				}
-
+				const { data } = await axios.get(`https://api.consumet.org/anime/gogoanime/${searchValue}?page=${currentPage}`);
+				const response = data.results.filter((item: IAnimeSearch) => !item.id.includes("dub"));
 				dispatch(setItem(response))
 				console.log(items)
 				setIsLoading(false);
@@ -80,10 +71,10 @@ const SearchPage = () => {
 					</div>
 					FILTERS .....
 				</div>
-				<div className="pagination">
-					<button disabled={(currentPage === 1 ? true : false)} className={`button pagination-button ${(currentPage === 1) ? 'disabled' : ''} `} onClick={decrementPage}> ⬅ </button>
-					<button className={'button pagination-button'} onClick={incrementPage}> ➡ </button>
-				</div>
+			</div>
+			<div className="pagination">
+				<button disabled={(currentPage === 1 ? true : false)} className={`button pagination-button ${(currentPage === 1) ? 'disabled' : ''} `} onClick={decrementPage}> ⬅ </button>
+				<button className={'button pagination-button'} onClick={incrementPage}> ➡ </button>
 			</div>
 		</div>
 	)

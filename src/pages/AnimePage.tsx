@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import Header from '../components/Header'
+import Header from '../components/Navbar'
 import Modal from '../components/Modal'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux'
 import { fetchAnimePlayer } from '../store/reducers/animePlayerSlice'
 import { fetchCommentsData, getAllComments } from '../store/reducers/CommentSlice'
 import { fetchAnimeById, setDetails } from '../store/reducers/fetchAnimeSlice'
-
+import { ReactComponent as Favorite } from '../assets/icons/Favorite.svg'
 
 
 const AnimePage: React.FC = () => {
@@ -95,7 +95,11 @@ const AnimePage: React.FC = () => {
 		console.log(episodes)
 	}, [details])
 
-
+	const states = [
+		{ value: 'purple', state: 'Смотрю' },
+		{ value: 'green', state: 'Просмотрено' },
+		{ value: 'orange', state: 'Запланировано' },
+	]
 
 
 
@@ -116,7 +120,7 @@ const AnimePage: React.FC = () => {
 			}
 			<div className='container'>
 				<Header />
-				<div className={`back-slider${scrollPosition > 400 ? ' slide' : ''}`}>
+				<div className={`back-slider${scrollPosition < 600 ? ' slide' : ''}`}>
 					<Link to={'/'} className={`button back-button `}>
 						<h2>
 							✖
@@ -133,12 +137,17 @@ const AnimePage: React.FC = () => {
 
 							</div>
 							<div className={`content-leftside-state`}>
-								<button onClick={() => setListModalOpen(!listModalOpen)} type='button' className={`content-leftside-state__block ${userWatchStateId === 1 ? 'green' : ''}`}>{userWatchStateId === 1 ? 'Просмотрено' : 'Добавить в список'} </button>
+								<Favorite />
+								<button onClick={() => setListModalOpen(!listModalOpen)} type='button'
+									className={`content-leftside-state__block ${userWatchStateId === 0 ? 'blue__bg' : states[userWatchStateId - 1].value + `__bg`}`}
+								>
+									{userWatchStateId === 0 ? 'Добавить в список' : states[userWatchStateId - 1].state}
+								</button>
 								{
 									<div className={`content-leftside-state-usermodal ${listModalOpen ? 'active' : ''}`} >
 										<ul ref={userWatchRef} onClick={() => setListModalOpen(!listModalOpen)} className={'content-leftside-state-usermodal-list'}>
-											<li onClick={() => setUserWatchStateId(1)} className="content-leftside-state-usermodal-list__item" > Просмотрено</li>
-											<li onClick={() => setUserWatchStateId(2)} className="content-leftside-state-usermodal-list__item" > Смотрю</li>
+											<li onClick={() => setUserWatchStateId(1)} className="content-leftside-state-usermodal-list__item" > Смотрю</li>
+											<li onClick={() => setUserWatchStateId(2)} className="content-leftside-state-usermodal-list__item" > Просмотрено</li>
 											<li onClick={() => setUserWatchStateId(3)} className="content-leftside-state-usermodal-list__item" > Запланировано</li>
 										</ul>
 									</div>

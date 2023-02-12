@@ -43,6 +43,7 @@ const Search = () => {
 	return (
 		<div className='search'>
 			<div className='search__box' >
+
 				<input ref={inputRef} onKeyDown={(e) => redirectToSearchPage(e)} value={searchInputValue} placeholder='Поиск' onChange={(e) => setSearchInputValue(e.target.value)} className='searchbar'></input>
 				<button type={'submit'} onClick={toggleSearch} className='search-button button'>
 					{/* {<Link to={`/Search`}> x </Link>} */}

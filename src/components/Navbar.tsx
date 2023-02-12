@@ -12,7 +12,7 @@ import logo from '../assets/images/logo.png'
 
 
 
-const Header: React.FC = () => {
+const Navbar: React.FC = () => {
 
 
 	const dispatch = useAppDispatch();
@@ -45,22 +45,21 @@ const Header: React.FC = () => {
 	const isAuth = useTypedSelector(state => state.auth.isAuth)
 
 	return (
-		<header className='header'>
-			{BurgerOpen &&
-				<div onClick={toggleBurger} className={`burger__modal ${BurgerOpen ? 'active' : ''}`}>
-					<li><Link className='links__link' to={'/'}>Anime</Link></li>
-					<li><Link className='links__link' to={'/'}>Manga</Link></li>
-					<li><Link className='links__link' to={'/'}>Books</Link></li>
-					<li><Link className='links__link' to={'/search'}>Search</Link></li>
-				</div>
-			}
-			<div className="header-leftside">
-				<div className='header-leftside__content'>
-					<h1><Link onClick={toggleSearch} className='logo' to={'/'}><img width={160} src={logo}></img></Link></h1>
+		<nav className='navbar'>
+			<div onClick={toggleBurger} className={`burger__modal ${BurgerOpen ? 'active' : ''}`}>
+				<img width={160} src={logo}></img>
+				<li><Link className='links__link' to={'/'}>Anime</Link></li>
+				<li><Link className='links__link' to={'/'}>Manga</Link></li>
+				<li><Link className='links__link' to={'/'}>Books</Link></li>
+				<li><Link className='links__link' to={'/search'}>Search</Link></li>
+			</div>
+			<div className="navbar-leftside">
+				<div className='navbar-leftside__content'>
+					<Link className='logo' to={'/'}><img width={160} src={logo}></img></Link>
 				</div>
 			</div>
-			<div className="header-center">
-				<ul className={`header-center__links ${isSearchOpen ? 'search-active' : ''}`}>
+			<div className="navbar-center">
+				<ul className={`navbar-center__links ${isSearchOpen ? 'search-active' : ''}`}>
 					{
 						(!isSearchOpen && <>
 							<li><Link className='links__link' to={'/'}>Anime</Link></li>
@@ -88,11 +87,11 @@ const Header: React.FC = () => {
 					</div>
 				</button>
 			</div >
-			<div className="header-rightside">
+			<div className="navbar-rightside">
 				{!isAuth ? <button className='button auth-button' onClick={toggleModal}>Log in</button> : <button className='button auth-button' onClick={() => dispatch(setAuth(false))}>Sign out</button>}
 			</div>
-		</header >
+		</nav >
 	)
 }
 
-export default Header
+export default Navbar;

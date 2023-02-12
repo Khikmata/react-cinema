@@ -5,7 +5,7 @@ import '../App.scss';
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal';
-import Header from '../components/Header';
+import Header from '../components/Navbar';
 import { IAnimeData } from '../models/IAnime';
 import axios from 'axios';
 import { setItem } from '../store/reducers/fetchAnimeSlice';

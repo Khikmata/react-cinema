@@ -1,13 +1,17 @@
 *{
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: content-box;
   color: white;
 }
 
 $background-color: #1e1e22;
 $blue: #45a7d4;
-$green: #3e9f17;
+$green: #13ac49;
+$orange: #cc941b;
+$purple: #c329a7;
+
+
 $halfOpacity: rgba(216, 216, 216, 0.4);
 
 
@@ -23,7 +27,7 @@ li{
 .wrapper {
   flex: 1 0 100%;
   min-height: 100vh;
-  max-width: 100vw;
+  max-width: 100%;
   @media(max-width:500px) {
     width: 100vw;
   }
@@ -33,10 +37,12 @@ li{
   color: white;
 }
 .container{
+  display: flex;
+  justify-content: center;
   margin: 0 auto;
-  max-width: 1320px;
+  max-width: 1124px;
   padding:0 20px ;
-position: relative;
+  position: relative;
 @media(max-width:500px){
   padding: 0 0px 0 0;
 }
@@ -50,29 +56,41 @@ h3{
 font-size: 16px;
   color: white;
 }
-
-.header{
-  width: 100%;
-  max-width: 1320px;
+.navbar{
+  display: flex;
   position: fixed;
   z-index: 100;
+  max-width: 1124px;
+  width: 100%;
   background-color:#1e1e22;
-  padding: 0 40px;
   height: 100px;
-  display: flex;
-  &-leftside {
-      flex: 33%;
-      @media(max-width:685px) {
+  justify-content: center;
 
+  &-leftside {
+            flex: 20%;
+
+      @media(max-width:1025px) {
+                    padding: 0 10px 0px 80px;
+      }
+      @media(max-width:425px) {
+        padding: 0 10px 0px 10px;
+        display: none;
       }
       &__content {
         display: flex;
+        justify-content: center;
         height: 100%;
         align-items: center;
+
         img {
             margin-top: 10px;
+
           }
           .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
           text-decoration: none;
           transition: all 0.2s ease-in-out;
           &:hover {
@@ -82,8 +100,10 @@ font-size: 16px;
       }
     }
   &-center {
-    position: relative;
-  flex: 34%;
+  flex: 60%;
+  justify-content: center;
+
+  position: relative;
   text-align: center;
   max-width: 600px;
   padding: 0px 20px;
@@ -92,12 +112,15 @@ padding: 0;
 
   }
   .burger{
-
+left: 10px;
     display: none;
     cursor: pointer;
     @media(max-width:700px){
-    display: block;
-      
+      padding-top: 40px;
+    display: flex;
+    width: 50px;
+    height: 50px;
+    position: relative;
     background-color: transparent;
     border: none;
       span  {
@@ -130,7 +153,7 @@ padding: 0;
   }
     &__links {
     display: flex;
-    justify-content: flex-end;
+              justify-content: center;
     align-items: center;
     height: 100%;
     @media (max-width: 700px){
@@ -143,7 +166,7 @@ padding: 0;
     &.search-active{
     display: block;
     position: relative;
-
+    
     }
     li {
 transition: all 0.2 ease-in-out;
@@ -173,11 +196,16 @@ transition: all 0.2 ease-in-out;
     }
   }
   &-rightside {
-    flex: 29%;
+          @media(max-width:1025px) {
+              padding: 0 80px 0px 10px;
+            }
+          @media(max-width:425px) {
+              padding: 0 20px 0px 10px;
+            }
+                flex: 20%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: right;
     align-items: center;
-    margin-right: 40px;
     @media(max-width: 1025px) {
     margin-right: 0px;
     }
@@ -186,32 +214,39 @@ transition: all 0.2 ease-in-out;
 
 
 .burger__modal{
+  position: fixed;
+  top: -500px;
+  transition: all 0.3s ease-in-out;
+  background-color: #1e1e22;
+  width: 100vw;
+  height: 40vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+      li {
+      
+          width: 100%;
+          text-align: center;
+          margin: 4px 0;
+      
+          a {
+            &:hover {
+              color: #45a7d4;
+            }
+      
+            text-decoration: none;
+      
+          }
+        }
   &.active{
-    
-    position: fixed;
-    left: 0;
-    top:0;
-    background-color: #1e1e22;
-    width: 100vw;
-    height: 40vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    top: 100px;
-    li{
+      transition: all 0.3s ease-in-out;
 
-      width: 100%;
-      text-align: center;
-      margin: 4px 0;
-      a {
-        &:hover{
-          color: #45a7d4;
-        }
-        text-decoration: none;
-
-        }
+    top: 80px;
+    img{
+      margin-bottom: 20px;
     }
+
   }
 }
 
@@ -272,7 +307,7 @@ span{
 .anime-card{
   &.searchpage{
     width: 100%;
-    height: 140px;
+    height: 100px;
     padding: 0px 40px 10px 0px;
     display: flex;
   }
@@ -294,7 +329,7 @@ span{
     width: 100%;
     height: 85%;
         &.searchpage{
-          width: 100px;
+          width: 60px;
           height: 100%;
         }
         img {
@@ -328,7 +363,7 @@ span{
     }
 }
 .main-hot__title{
-  margin: 20px 100px;
+  margin: 40px 25px;
   font-size: 24px;
     color: #45a7d4;
     @media(max-width: 1025px){
@@ -380,7 +415,8 @@ span{
     font-size: 24px;
     &:hover{
       color: white;
-      border: 3px solid #d8d8d8;
+      border: 1px solid #d8d8d8;
+      scale: 103%;
     }
   }
   &.genre_button{
@@ -401,6 +437,7 @@ span{
           background-color: #45a7d4;
     }
     h2{
+      color: #d8d8d8;
       position: absolute;
       bottom: 10px;
       left: 50%;
@@ -414,6 +451,7 @@ span{
       position: absolute;
       display: block;
       border-bottom: 0px;
+      left: 5.5%;
      top: 40%;
      path{
        fill: #979797;
@@ -446,11 +484,15 @@ span{
   height: 100%;
   width: 100%;
   transition: all 0.3s ease-in-out;
-  padding: 0 20px;
     &__box{
     padding-left: 40px;
     display: flex;
-    width: 100%;
+    @media(max-width: 769px){
+      width: 100%;
+    }
+
+      width: 47%;
+
     align-items: center;
     border: 1px solid #979797;
     border-radius: 4px;
@@ -490,7 +532,7 @@ z-index: 10000;
 }
 .modal-box{
     position: relative;
-    padding: 20px 50px;
+    padding: 20px 20px;
     border-radius: 12px;
     background-color: #272a33;
     width: 360px;
@@ -504,6 +546,12 @@ z-index: 10000;
   display: flex;
   width: 100%;
   height: 100%;
+  justify-content: center;
+  form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   &__close{
     display: flex;
     justify-content: flex-end;
@@ -540,7 +588,7 @@ z-index: 10000;
 }
 &__button{
   margin-top: 30px;
-  width: 100%;
+  width: 80%;
   height: 40px;
   border-radius: 6px;
   background-color: #5985ff;
@@ -579,8 +627,8 @@ height: 32px;
   }
 }
 .anime-page{
-    padding: 130px 20px 200px;
-
+    padding: 130px 0;
+width: 100%;
 }
 .content{
   margin-top: 40px;
@@ -588,6 +636,7 @@ height: 32px;
   padding: 0 0 70px;
   @media(max-width: 600px) {
       flex-direction: column;
+      align-items: center;
     }
     &-leftside {
         @media(max-width: 600px) {
@@ -599,16 +648,21 @@ height: 32px;
       align-items: center;
       flex: 25%;
       &-state{
-        margin-top: 20px;
+        margin-top: 12px;
         display: flex;
+        max-width: 280px;
         width: 100%;
         height: 100%;
         flex-direction: column;
         position: relative;
-        .green {
-            background-color: $green;
-            border: 0;
-          }
+        svg{
+          height: 32px;
+        width: 32px;
+        margin-bottom: 12px;
+        :hover{
+          //fill
+        }
+        }
         &__block{
           display: flex;
           background-color: $blue;
@@ -679,9 +733,14 @@ height: 32px;
       }
     
       &-rightside {
+        display: flex;
+        flex-direction: column;
         padding: 20px 40px;
         @media(max-width: 500px){
           padding: 0px 10px;
+          max-width: 280px;
+          justify-content: center;
+          align-items: center;
         }
         flex: 75%;
         h1{
@@ -740,13 +799,13 @@ height: 32px;
 }
 
 .description-mobile {
-  padding: 0px 30px 70px ;
+  padding: 0 20px;
+  margin: 0px 0px 70px ;
   display: none;
   margin-top: -40px;
   height: 100px;
   overflow: hidden;
   border-bottom: 1px solid $halfOpacity;
-
   &.active {
     overflow: visible;
     height: 100%;
@@ -955,14 +1014,27 @@ iframe{
   }
 }
 .back-slider{
-  z-index: 10;
+  z-index: 20;
   position: fixed;
-  width: 1280px;
+  width: 90%;
   transition: all 0.3s ease-in-out;
+  top: -200px;
   &.slide{
-  transform: translateY(-100px);
+    top: 0px;
   }
 }
 .gray{
   color: #d8d8d8;
+}
+.green__bg{
+  background-color: $green;
+}
+.purple__bg{
+  background-color: $purple;
+}
+.orange__bg{
+  background-color: $orange;
+}
+.blue__bg{
+  background-color: $blue;
 }
