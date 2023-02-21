@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import Header from '../components/Navbar'
-import Skeleton from '../components/Skeleton';
+import Skeleton from '../components/UI/Skeleton';
 import { useAppDispatch, useTypedSelector } from '../hooks/redux';
 import { IAnimeData, IAnimeSearch } from '../models/IAnime';
 import { setItem } from '../store/reducers/fetchAnimeSlice';

@@ -9,7 +9,7 @@ import Header from '../components/Navbar';
 import { IAnimeData } from '../models/IAnime';
 import axios from 'axios';
 import { setItem } from '../store/reducers/fetchAnimeSlice';
-import Skeleton from '../components/Skeleton';
+import Skeleton from '../components/UI/Skeleton';
 
 
 

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
@@ -36,12 +36,12 @@ const initialState: AuthState = {
 }
 
 export const registerUser = createAsyncThunk('/auth/register', async (props: IDataRegister) => {
-	const { data } = await axios.post(`${process.env.REACT_APP_API_URL || 'http://localhost:4444/'}auth/register`, props);
+	const { data } = await axios.post(`${process.env.MONGODB_URI || 'http://localhost:4444/'}auth/register`, props);
 	return data;
 })
 export const loginUser = createAsyncThunk('/auth/login', async (props: IDataLogin) => {
 
-	const { data } = await axios.post(`${process.env.REACT_APP_API_URL || 'http://localhost:4444/'}auth/login`, props);
+	const { data } = await axios.post(`${process.env.MONGODB_URI || 'http://localhost:4444/'}auth/login`, props);
 	return data;
 })
 

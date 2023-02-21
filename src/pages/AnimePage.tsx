@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import Header from '../components/Navbar'
+import Favorite from '../assets/icons/Favorite.svg'
+import FavoriteFilled from '../assets/icons/FavoriteFilled.svg'
 import Modal from '../components/Modal'
+import Header from '../components/Navbar'
 import { useAppDispatch, useTypedSelector } from '../hooks/redux'
 import { fetchAnimePlayer } from '../store/reducers/animePlayerSlice'
-import { fetchCommentsData, getAllComments } from '../store/reducers/CommentSlice'
+import { fetchCommentsData } from '../store/reducers/CommentSlice'
 import { fetchAnimeById, setDetails } from '../store/reducers/fetchAnimeSlice'
-import { ReactComponent as Favorite } from '../assets/icons/Favorite.svg'
 
 
 const AnimePage: React.FC = () => {
@@ -72,8 +73,6 @@ const AnimePage: React.FC = () => {
 	}
 
 
-
-	//fetch on mount
 	useEffect(() => {
 		window.addEventListener('scroll', handleScroll, { passive: true });
 		fetchComments();
@@ -101,7 +100,7 @@ const AnimePage: React.FC = () => {
 		{ value: 'orange', state: 'Запланировано' },
 	]
 
-
+	const [favorite, setFavorite] = useState(false);
 
 	const handleScroll = () => {
 		const position = window.pageYOffset;
@@ -112,6 +111,13 @@ const AnimePage: React.FC = () => {
 		if (listModalOpen === true) {
 			setListModalOpen(false);
 		}
+	}
+
+	const handleUserState = (id: number) => {
+		if (id === userWatchStateId) {
+			return setUserWatchStateId(0)
+		}
+		setUserWatchStateId(id);
 	}
 
 	return (
@@ -134,10 +140,11 @@ const AnimePage: React.FC = () => {
 						<div className="content-leftside">
 							<div className="content-leftside__image">
 								<img src={details.image}></img>
-
+								<div className='content-leftside__favorite'>
+									<img className={`${favorite ? 'favorited' : ''}`} onClick={() => setFavorite(!favorite)} src={favorite ? FavoriteFilled : Favorite}></img>
+								</div>
 							</div>
 							<div className={`content-leftside-state`}>
-								<Favorite />
 								<button onClick={() => setListModalOpen(!listModalOpen)} type='button'
 									className={`content-leftside-state__block ${userWatchStateId === 0 ? 'blue__bg' : states[userWatchStateId - 1].value + `__bg`}`}
 								>
@@ -145,10 +152,10 @@ const AnimePage: React.FC = () => {
 								</button>
 								{
 									<div className={`content-leftside-state-usermodal ${listModalOpen ? 'active' : ''}`} >
-										<ul ref={userWatchRef} onClick={() => setListModalOpen(!listModalOpen)} className={'content-leftside-state-usermodal-list'}>
-											<li onClick={() => setUserWatchStateId(1)} className="content-leftside-state-usermodal-list__item" > Смотрю</li>
-											<li onClick={() => setUserWatchStateId(2)} className="content-leftside-state-usermodal-list__item" > Просмотрено</li>
-											<li onClick={() => setUserWatchStateId(3)} className="content-leftside-state-usermodal-list__item" > Запланировано</li>
+										<ul ref={userWatchRef} onClick={() => setListModalOpen(!listModalOpen)} className={`content-leftside-state-usermodal-list ${listModalOpen ? 'active' : ''}`}>
+											<li onClick={() => handleUserState(1)} className={"content-leftside-state-usermodal-list__item"} >Смотрю</li>
+											<li onClick={() => handleUserState(2)} className="content-leftside-state-usermodal-list__item" > Просмотрено</li>
+											<li onClick={() => handleUserState(3)} className="content-leftside-state-usermodal-list__item" > Запланировано</li>
 										</ul>
 									</div>
 								}
@@ -181,14 +188,13 @@ const AnimePage: React.FC = () => {
 							</>
 							)
 						}
-
 						<h2> Watch online </h2>
 						<div className='watch-anime'>
 							{
 								(sources.length === 0
 									? <div className='watch-anime__placeholder'></div>
 									: <div className='watch-anime__container'>
-										<iframe allowFullScreen={true} height={450} width={800} className='watch-anime__display' scrolling="no" src={`${sources[0]}`}></iframe>
+										<iframe allowFullScreen={true} height={450} width={1200} className='watch-anime__display' scrolling="no" src={`${sources[0]}`}></iframe>
 									</div>
 								)
 							}
