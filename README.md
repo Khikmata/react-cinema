@@ -1,3 +1,3 @@
-Work in progress
+Аниме-кинотеатр Weebflix на gogoAPI
 
-react-anime-cinema
+Активные технологии: React, RTK, typescript, scss, react-hook-forms, react-router, react-persist, axios
